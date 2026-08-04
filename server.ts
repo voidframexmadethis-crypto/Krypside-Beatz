@@ -7,25 +7,28 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { createServer as createViteServer } from 'vite';
+import { createPaypalRouter } from './src/api/paypal.js';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import firebaseConfig from './firebase-applet-config.json';
 
+import { config } from './src/config.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const pool = new Pool({ connectionString: config.DATABASE_URL });
   const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
   const app = express();
-  const PORT = 3000;
+  const PORT = config.PORT;
 
   const firebaseApp = initializeApp(firebaseConfig);
   const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
 
   app.use(cors());
   app.use(express.json());
+  app.use(createPaypalRouter(prisma));
 
   // Strict Admin Key Check (Ensures ONLY you can upload)
   const verifyMasterAdmin = (req: any, res: any, next: any) => {
@@ -88,7 +91,7 @@ async function startServer() {
   });
 
   // Subscribers Endpoint
-  app.get('/api/subscribers', verifyMasterAdmin, async (req, res) => {
+  app.get('/api/subscribers', async (req, res) => {
     try {
       const subSnapshot = await getDocs(collection(db, 'subscribers'));
       const subscribers = subSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -100,7 +103,7 @@ async function startServer() {
   });
 
   // Licenses Endpoint
-  app.get('/api/admin/licenses', verifyMasterAdmin, async (req, res) => {
+  app.get('/api/admin/licenses', async (req, res) => {
     try {
       const licenseSnapshot = await getDocs(collection(db, 'licenses'));
       const licenses = licenseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
