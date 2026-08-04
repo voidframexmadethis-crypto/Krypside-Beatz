@@ -1,6 +1,6 @@
 {
-  "name": "Remix Krypside-",
-  "description": "Imported from GitHub: voidframexmadethis-crypto/Krypside-",
+  "name": "krypside-beatz",
+  "description": "Krypside Beat Store",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
