@@ -28,11 +28,12 @@ export default defineConfig(() => {
       chunkSizeWarningLimit: 3000,
       rollupOptions: {
         external: [
-          '/src/generated/client/*'
-        ]
-      },
-      commonjsOptions: {
-        ignoreTryCatch: true,
+          /src\/generated\/client\/.*/,
+          '@prisma/client',
+          '.prisma/client',
+          'prisma',
+          'puppeteer'
+        ],
       }
     }
   };

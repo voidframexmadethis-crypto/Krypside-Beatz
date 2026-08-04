@@ -63,21 +63,20 @@ async function startServer() {
       } = req.body;
 
       // Register track directly into your private database catalog
-      const newBeat = await prisma.masterTrack.create({
+      const newBeat = await prisma.beat.create({
         data: {
           title,
           bpm: Number(bpm),
-          slug: title.toLowerCase().replace(/\s+/g, '-'),
-          musicalKey: key,
+          key,
           genre: "Trap",
-          taggedMp3Url: mp3Url,
-          untaggedWavUrl: wavUrl,
-          stemsZipUrl: stemsUrl,
-          coverArtUrl: coverArtUrl,
+          mp3Url,
+          wavUrl,
+          stemsUrl,
+          coverArtUrl,
           priceMp3: Number(priceMp3),
           priceWav: Number(priceWav),
           priceStems: Number(priceStems),
-          priceExclusive: Number(priceExcl)
+          priceExcl: Number(priceExcl)
         }
       });
 
@@ -117,53 +116,13 @@ async function startServer() {
   // Public Catalog Stream Endpoint (For artists browsing your site)
   app.get('/api/beats', async (req, res) => {
     try {
-      const beats = await prisma.masterTrack.findMany({
+      const beats = await prisma.beat.findMany({
         orderBy: { createdAt: 'desc' }
       });
       res.json(beats);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
-  });
-
-  app.get('/stream/:beatId', (req, res) => {
-      // Path to your local or external audio file storage
-      const audioPath = path.resolve(`./audio-vault/${req.params.beatId}.mp3`);
-      
-      if (!fs.existsSync(audioPath)) {
-          return res.status(404).send('Beat not found');
-      }
-
-      const stat = fs.statSync(audioPath);
-      const fileSize = stat.size;
-      const range = req.headers.range;
-
-      if (range) {
-          // Parse range header for chunked streaming
-          const parts = range.replace(/bytes=/, "").split("-");
-          const start = parseInt(parts[0], 10);
-          const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-          const chunksize = (end - start) + 1;
-          const file = fs.createReadStream(audioPath, { start, end });
-          
-          const head = {
-              'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-              'Accept-Ranges': 'bytes',
-              'Content-Length': chunksize,
-              'Content-Type': 'audio/mpeg',
-          };
-          
-          res.writeHead(206, head);
-          file.pipe(res);
-      } else {
-          const head = {
-              'Content-Length': fileSize,
-              'Content-Type': 'audio/mpeg',
-          };
-          
-          res.writeHead(200, head);
-          fs.createReadStream(audioPath).pipe(res);
-      }
   });
 
   // Vite middleware for development

@@ -79,7 +79,7 @@ const BeatUploader = React.memo(() => {
       price: '' as string | number,
       coverArtUrl: '',
       audioUrl: '',
-      untaggedWavUrl: '',
+      untaggedM4aUrl: '',
       stemsZipUrl: '',
       freeDownload: { enabled: true, requirement: 'email', protection: 'tagged' },
       isExclusive: false,
@@ -446,7 +446,7 @@ const BeatUploader = React.memo(() => {
         setFormData((prev: any) => ({
           ...prev, 
           audioUrl: (role === 'tagged' && !prev.audioUrl) ? beatPayload.url : prev.audioUrl,
-          untaggedWavUrl: (role === 'untagged' && !prev.untaggedWavUrl) ? beatPayload.url : prev.untaggedWavUrl,
+          untaggedM4aUrl: (role === 'untagged' && !prev.untaggedM4aUrl) ? beatPayload.url : prev.untaggedM4aUrl,
           stemsZipUrl: (role === 'stems' && !prev.stemsZipUrl) ? beatPayload.url : prev.stemsZipUrl,
           voiceTagUrl: (role === 'tag' && !prev.voiceTagUrl) ? beatPayload.url : prev.voiceTagUrl,
           title: prev.title || beatPayload.title,
@@ -568,7 +568,7 @@ const BeatUploader = React.memo(() => {
       price: Number(formData.price) || 35.00,
       coverArtUrl: formData.coverArtUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
       audioUrl: finalAudioUrl,
-      untaggedWavUrl: formData.untaggedWavUrl,
+      untaggedM4aUrl: formData.untaggedM4aUrl,
       stemsZipUrl: formData.stemsZipUrl,
       redirectUrl: finalRedirectUrl,
       visibility: (formData.visibilityPlacement as any) || 'Public',
@@ -735,9 +735,9 @@ const BeatUploader = React.memo(() => {
                         <p className="text-[10px] text-neutral-500">Upload Tagged MP3</p>
                       </>
                     )}
-                    <input id="mp3-upload" type="file" accept="audio/mpeg,audio/mp3" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'tagged')} />
+                    <input id="mp3-upload" type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'tagged')} />
                   </div>
-                  {formData.untaggedWavUrl && formData.voiceTagUrl && (
+                  {formData.untaggedM4aUrl && formData.voiceTagUrl && (
                     <button 
                       onClick={async () => {
                         setIsUploading(true);
@@ -746,7 +746,7 @@ const BeatUploader = React.memo(() => {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                              rawBeatUrl: formData.untaggedWavUrl,
+                              rawBeatUrl: formData.untaggedM4aUrl,
                               voiceTagUrl: formData.voiceTagUrl,
                               outputFileName: `tagged_${formData.title.replace(/\s+/g, '_')}_${Date.now()}.mp3`
                             })
@@ -776,35 +776,35 @@ const BeatUploader = React.memo(() => {
                   />
                 </div>
 
-                {/* UNTAGGED WAV */}
+                {/* UNTAGGED M4A */}
                 <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-4 flex flex-col">
                   <div className="flex justify-between items-center mb-2">
-                    <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Untagged WAV</label>
+                    <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Untagged M4A</label>
                     <span className="text-[10px] text-emerald-400 font-medium">For Buyers</span>
                   </div>
                   <div 
                     className="flex-1 border border-dashed border-neutral-700 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-900/50 transition-colors"
-                    onClick={() => document.getElementById('wav-upload')?.click()}
+                    onClick={() => document.getElementById('m4a-upload')?.click()}
                   >
-                    {formData.untaggedWavUrl ? (
+                    {formData.untaggedM4aUrl ? (
                       <div className="text-center w-full">
                         <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
-                        <p className="text-[10px] text-neutral-300 truncate w-full px-2">{formData.untaggedWavUrl.split('/').pop()}</p>
+                        <p className="text-[10px] text-neutral-300 truncate w-full px-2">{formData.untaggedM4aUrl.split('/').pop()}</p>
                       </div>
                     ) : (
                       <>
                         <Music className="w-5 h-5 text-neutral-500 mb-1" />
-                        <p className="text-[10px] text-neutral-500">Upload Untagged WAV</p>
+                        <p className="text-[10px] text-neutral-500">Upload Untagged M4A</p>
                       </>
                     )}
-                    <input id="wav-upload" type="file" accept="audio/wav,audio/x-wav" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'untagged')} />
+                    <input id="m4a-upload" type="file" accept="audio/mp4,audio/x-m4a" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'untagged')} />
                   </div>
                   <input
                     type="url"
-                    name="untaggedWavUrl"
-                    value={formData.untaggedWavUrl}
+                    name="untaggedM4aUrl"
+                    value={formData.untaggedM4aUrl}
                     onChange={handleChange}
-                    placeholder="Direct WAV Link"
+                    placeholder="Direct M4A Link"
                     className="mt-2 w-full bg-neutral-900 border border-neutral-800 rounded px-2 py-1.5 text-[10px] text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>

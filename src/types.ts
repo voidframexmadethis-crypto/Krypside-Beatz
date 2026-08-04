@@ -87,7 +87,7 @@ export interface Beat {
   price: number;
   coverArtUrl: string;
   audioUrl: string; // The URL to play (tagged MP3)
-  untaggedWavUrl?: string; // High quality untagged WAV
+  untaggedM4aUrl?: string; // High quality untagged M4A
   stemsZipUrl?: string; // ZIP file with stems
   watermarkedAudioUrl?: string; // Watermarked version for preview
   visibility: 'Public' | 'Private' | 'Unlisted';
