@@ -26,6 +26,14 @@ export default defineConfig(() => {
     },
     build: {
       chunkSizeWarningLimit: 3000,
+      rollupOptions: {
+        external: [
+          '/src/generated/client/*'
+        ]
+      },
+      commonjsOptions: {
+        ignoreTryCatch: true,
+      }
     }
   };
 });
