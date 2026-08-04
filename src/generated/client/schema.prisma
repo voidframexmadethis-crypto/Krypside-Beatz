@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Beat {
+  id          String   @id @default(uuid())
+  title       String
+  bpm         Int
+  key         String
+  genre       String   @default("Trap")
+  mp3Url      String // Tagged MP3 for public stream
+  wavUrl      String // Untagged Master WAV for buyers
+  stemsUrl    String // Trackouts ZIP file
+  coverArtUrl String
+  priceMp3    Float    @default(29.99)
+  priceWav    Float    @default(49.99)
+  priceStems  Float    @default(99.99)
+  priceExcl   Float    @default(499.99)
+  createdAt   DateTime @default(now())
+}

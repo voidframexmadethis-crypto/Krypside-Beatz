@@ -1,0 +1,8 @@
+{
+  "name": "Remix Krypside-",
+  "description": "Imported from GitHub: voidframexmadethis-crypto/Krypside-",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

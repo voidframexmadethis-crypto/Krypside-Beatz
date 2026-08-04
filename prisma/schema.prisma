@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MasterTrack {
+  id              String          @id @default(uuid())
+  title           String          @db.VarChar(255)
+  slug            String          @unique
+  bpm             Int
+  musicalKey      String          @db.VarChar(50) // e.g., "C# Minor"
+  genre           String          @default("Trap")
+  subGenre        String?
+  moodTags        String[]        // Array of moods for advanced searching
+  
+  // Secure Asset Vault Links (Lossless, zero-distortion storage paths)
+  taggedMp3Url    String
+  untaggedWavUrl  String
+  stemsZipUrl     String
+  coverArtUrl     String
+  
+  // Pricing Structure Tiers
+  priceMp3        Float           @default(29.99)
+  priceWav        Float           @default(49.99)
+  priceStems      Float           @default(99.99)
+  priceExclusive  Float           @default(999.99)
+  
+  // Advanced Features & Status
+  isExclusiveSold Boolean         @default(false)
+  isVaultLocked   Boolean         @default(false) // For secret drop mode
+  playCount       Int             @default(0)
+  downloadCount   Int             @default(0)
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  sales           Transaction[]
+
+  @@index([bpm])
+  @@index([genre])
+  @@index([musicalKey])
+}
+
+model Transaction {
+  id              String       @id @default(uuid())
+  trackId         String
+  track           MasterTrack  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  buyerEmail      String       // Captured for your automated marketing list
+  licenseType     String       // MP3, WAV, STEMS, EXCLUSIVE
+  amountPaid      Float
+  paymentGateway  String       // Stripe, PayPal, Crypto
+  licensePdfUrl   String       // Auto-generated legal contract link
+  createdAt       DateTime     @default(now())
+
+  @@index([buyerEmail])
+}
