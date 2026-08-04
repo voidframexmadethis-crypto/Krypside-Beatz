@@ -14,10 +14,15 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model Beat
+ * Model MasterTrack
  * 
  */
-export type Beat = $Result.DefaultSelection<Prisma.$BeatPayload>
+export type MasterTrack = $Result.DefaultSelection<Prisma.$MasterTrackPayload>
+/**
+ * Model Transaction
+ * 
+ */
+export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -28,8 +33,8 @@ export type Beat = $Result.DefaultSelection<Prisma.$BeatPayload>
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Beats
- * const beats = await prisma.beat.findMany()
+ * // Fetch zero or more MasterTracks
+ * const masterTracks = await prisma.masterTrack.findMany()
  * ```
  *
  *
@@ -51,8 +56,8 @@ export class PrismaClient<
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Beats
-   * const beats = await prisma.beat.findMany()
+   * // Fetch zero or more MasterTracks
+   * const masterTracks = await prisma.masterTrack.findMany()
    * ```
    *
    *
@@ -141,14 +146,24 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.beat`: Exposes CRUD operations for the **Beat** model.
+   * `prisma.masterTrack`: Exposes CRUD operations for the **MasterTrack** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Beats
-    * const beats = await prisma.beat.findMany()
+    * // Fetch zero or more MasterTracks
+    * const masterTracks = await prisma.masterTrack.findMany()
     * ```
     */
-  get beat(): Prisma.BeatDelegate<ExtArgs, ClientOptions>;
+  get masterTrack(): Prisma.MasterTrackDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Transactions
+    * const transactions = await prisma.transaction.findMany()
+    * ```
+    */
+  get transaction(): Prisma.TransactionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -596,7 +611,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Beat: 'Beat'
+    MasterTrack: 'MasterTrack',
+    Transaction: 'Transaction'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -612,81 +628,155 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "beat"
+      modelProps: "masterTrack" | "transaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      Beat: {
-        payload: Prisma.$BeatPayload<ExtArgs>
-        fields: Prisma.BeatFieldRefs
+      MasterTrack: {
+        payload: Prisma.$MasterTrackPayload<ExtArgs>
+        fields: Prisma.MasterTrackFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.BeatFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload> | null
+            args: Prisma.MasterTrackFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.BeatFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>
+            args: Prisma.MasterTrackFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>
           }
           findFirst: {
-            args: Prisma.BeatFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload> | null
+            args: Prisma.MasterTrackFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.BeatFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>
+            args: Prisma.MasterTrackFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>
           }
           findMany: {
-            args: Prisma.BeatFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>[]
+            args: Prisma.MasterTrackFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>[]
           }
           create: {
-            args: Prisma.BeatCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>
+            args: Prisma.MasterTrackCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>
           }
           createMany: {
-            args: Prisma.BeatCreateManyArgs<ExtArgs>
+            args: Prisma.MasterTrackCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.BeatCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>[]
+            args: Prisma.MasterTrackCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>[]
           }
           delete: {
-            args: Prisma.BeatDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>
+            args: Prisma.MasterTrackDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>
           }
           update: {
-            args: Prisma.BeatUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>
+            args: Prisma.MasterTrackUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>
           }
           deleteMany: {
-            args: Prisma.BeatDeleteManyArgs<ExtArgs>
+            args: Prisma.MasterTrackDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.BeatUpdateManyArgs<ExtArgs>
+            args: Prisma.MasterTrackUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.BeatUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>[]
+            args: Prisma.MasterTrackUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>[]
           }
           upsert: {
-            args: Prisma.BeatUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeatPayload>
+            args: Prisma.MasterTrackUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MasterTrackPayload>
           }
           aggregate: {
-            args: Prisma.BeatAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateBeat>
+            args: Prisma.MasterTrackAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMasterTrack>
           }
           groupBy: {
-            args: Prisma.BeatGroupByArgs<ExtArgs>
-            result: $Utils.Optional<BeatGroupByOutputType>[]
+            args: Prisma.MasterTrackGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MasterTrackGroupByOutputType>[]
           }
           count: {
-            args: Prisma.BeatCountArgs<ExtArgs>
-            result: $Utils.Optional<BeatCountAggregateOutputType> | number
+            args: Prisma.MasterTrackCountArgs<ExtArgs>
+            result: $Utils.Optional<MasterTrackCountAggregateOutputType> | number
+          }
+        }
+      }
+      Transaction: {
+        payload: Prisma.$TransactionPayload<ExtArgs>
+        fields: Prisma.TransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findMany: {
+            args: Prisma.TransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          create: {
+            args: Prisma.TransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          createMany: {
+            args: Prisma.TransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          update: {
+            args: Prisma.TransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransaction>
+          }
+          groupBy: {
+            args: Prisma.TransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionCountAggregateOutputType> | number
           }
         }
       }
@@ -813,7 +903,8 @@ export namespace Prisma {
     comments?: runtime.SqlCommenterPlugin[]
   }
   export type GlobalOmitConfig = {
-    beat?: BeatOmit
+    masterTrack?: MasterTrackOmit
+    transaction?: TransactionOmit
   }
 
   /* Types for Logging */
@@ -889,500 +980,640 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type MasterTrackCountOutputType
+   */
+
+  export type MasterTrackCountOutputType = {
+    sales: number
+  }
+
+  export type MasterTrackCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sales?: boolean | MasterTrackCountOutputTypeCountSalesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MasterTrackCountOutputType without action
+   */
+  export type MasterTrackCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MasterTrackCountOutputType
+     */
+    select?: MasterTrackCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MasterTrackCountOutputType without action
+   */
+  export type MasterTrackCountOutputTypeCountSalesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+  }
+
 
   /**
    * Models
    */
 
   /**
-   * Model Beat
+   * Model MasterTrack
    */
 
-  export type AggregateBeat = {
-    _count: BeatCountAggregateOutputType | null
-    _avg: BeatAvgAggregateOutputType | null
-    _sum: BeatSumAggregateOutputType | null
-    _min: BeatMinAggregateOutputType | null
-    _max: BeatMaxAggregateOutputType | null
+  export type AggregateMasterTrack = {
+    _count: MasterTrackCountAggregateOutputType | null
+    _avg: MasterTrackAvgAggregateOutputType | null
+    _sum: MasterTrackSumAggregateOutputType | null
+    _min: MasterTrackMinAggregateOutputType | null
+    _max: MasterTrackMaxAggregateOutputType | null
   }
 
-  export type BeatAvgAggregateOutputType = {
+  export type MasterTrackAvgAggregateOutputType = {
     bpm: number | null
     priceMp3: number | null
     priceWav: number | null
     priceStems: number | null
-    priceExcl: number | null
+    priceExclusive: number | null
+    playCount: number | null
+    downloadCount: number | null
   }
 
-  export type BeatSumAggregateOutputType = {
+  export type MasterTrackSumAggregateOutputType = {
     bpm: number | null
     priceMp3: number | null
     priceWav: number | null
     priceStems: number | null
-    priceExcl: number | null
+    priceExclusive: number | null
+    playCount: number | null
+    downloadCount: number | null
   }
 
-  export type BeatMinAggregateOutputType = {
+  export type MasterTrackMinAggregateOutputType = {
     id: string | null
     title: string | null
+    slug: string | null
     bpm: number | null
-    key: string | null
+    musicalKey: string | null
     genre: string | null
-    mp3Url: string | null
-    wavUrl: string | null
-    stemsUrl: string | null
+    subGenre: string | null
+    taggedMp3Url: string | null
+    untaggedWavUrl: string | null
+    stemsZipUrl: string | null
     coverArtUrl: string | null
     priceMp3: number | null
     priceWav: number | null
     priceStems: number | null
-    priceExcl: number | null
+    priceExclusive: number | null
+    isExclusiveSold: boolean | null
+    isVaultLocked: boolean | null
+    playCount: number | null
+    downloadCount: number | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type BeatMaxAggregateOutputType = {
+  export type MasterTrackMaxAggregateOutputType = {
     id: string | null
     title: string | null
+    slug: string | null
     bpm: number | null
-    key: string | null
+    musicalKey: string | null
     genre: string | null
-    mp3Url: string | null
-    wavUrl: string | null
-    stemsUrl: string | null
+    subGenre: string | null
+    taggedMp3Url: string | null
+    untaggedWavUrl: string | null
+    stemsZipUrl: string | null
     coverArtUrl: string | null
     priceMp3: number | null
     priceWav: number | null
     priceStems: number | null
-    priceExcl: number | null
+    priceExclusive: number | null
+    isExclusiveSold: boolean | null
+    isVaultLocked: boolean | null
+    playCount: number | null
+    downloadCount: number | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type BeatCountAggregateOutputType = {
+  export type MasterTrackCountAggregateOutputType = {
     id: number
     title: number
+    slug: number
     bpm: number
-    key: number
+    musicalKey: number
     genre: number
-    mp3Url: number
-    wavUrl: number
-    stemsUrl: number
+    subGenre: number
+    moodTags: number
+    taggedMp3Url: number
+    untaggedWavUrl: number
+    stemsZipUrl: number
     coverArtUrl: number
     priceMp3: number
     priceWav: number
     priceStems: number
-    priceExcl: number
+    priceExclusive: number
+    isExclusiveSold: number
+    isVaultLocked: number
+    playCount: number
+    downloadCount: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
-  export type BeatAvgAggregateInputType = {
+  export type MasterTrackAvgAggregateInputType = {
     bpm?: true
     priceMp3?: true
     priceWav?: true
     priceStems?: true
-    priceExcl?: true
+    priceExclusive?: true
+    playCount?: true
+    downloadCount?: true
   }
 
-  export type BeatSumAggregateInputType = {
+  export type MasterTrackSumAggregateInputType = {
     bpm?: true
     priceMp3?: true
     priceWav?: true
     priceStems?: true
-    priceExcl?: true
+    priceExclusive?: true
+    playCount?: true
+    downloadCount?: true
   }
 
-  export type BeatMinAggregateInputType = {
+  export type MasterTrackMinAggregateInputType = {
     id?: true
     title?: true
+    slug?: true
     bpm?: true
-    key?: true
+    musicalKey?: true
     genre?: true
-    mp3Url?: true
-    wavUrl?: true
-    stemsUrl?: true
+    subGenre?: true
+    taggedMp3Url?: true
+    untaggedWavUrl?: true
+    stemsZipUrl?: true
     coverArtUrl?: true
     priceMp3?: true
     priceWav?: true
     priceStems?: true
-    priceExcl?: true
+    priceExclusive?: true
+    isExclusiveSold?: true
+    isVaultLocked?: true
+    playCount?: true
+    downloadCount?: true
     createdAt?: true
+    updatedAt?: true
   }
 
-  export type BeatMaxAggregateInputType = {
+  export type MasterTrackMaxAggregateInputType = {
     id?: true
     title?: true
+    slug?: true
     bpm?: true
-    key?: true
+    musicalKey?: true
     genre?: true
-    mp3Url?: true
-    wavUrl?: true
-    stemsUrl?: true
+    subGenre?: true
+    taggedMp3Url?: true
+    untaggedWavUrl?: true
+    stemsZipUrl?: true
     coverArtUrl?: true
     priceMp3?: true
     priceWav?: true
     priceStems?: true
-    priceExcl?: true
+    priceExclusive?: true
+    isExclusiveSold?: true
+    isVaultLocked?: true
+    playCount?: true
+    downloadCount?: true
     createdAt?: true
+    updatedAt?: true
   }
 
-  export type BeatCountAggregateInputType = {
+  export type MasterTrackCountAggregateInputType = {
     id?: true
     title?: true
+    slug?: true
     bpm?: true
-    key?: true
+    musicalKey?: true
     genre?: true
-    mp3Url?: true
-    wavUrl?: true
-    stemsUrl?: true
+    subGenre?: true
+    moodTags?: true
+    taggedMp3Url?: true
+    untaggedWavUrl?: true
+    stemsZipUrl?: true
     coverArtUrl?: true
     priceMp3?: true
     priceWav?: true
     priceStems?: true
-    priceExcl?: true
+    priceExclusive?: true
+    isExclusiveSold?: true
+    isVaultLocked?: true
+    playCount?: true
+    downloadCount?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
-  export type BeatAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Beat to aggregate.
+     * Filter which MasterTrack to aggregate.
      */
-    where?: BeatWhereInput
+    where?: MasterTrackWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beats to fetch.
+     * Determine the order of MasterTracks to fetch.
      */
-    orderBy?: BeatOrderByWithRelationInput | BeatOrderByWithRelationInput[]
+    orderBy?: MasterTrackOrderByWithRelationInput | MasterTrackOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: BeatWhereUniqueInput
+    cursor?: MasterTrackWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beats from the position of the cursor.
+     * Take `±n` MasterTracks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beats.
+     * Skip the first `n` MasterTracks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Beats
+     * Count returned MasterTracks
     **/
-    _count?: true | BeatCountAggregateInputType
+    _count?: true | MasterTrackCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: BeatAvgAggregateInputType
+    _avg?: MasterTrackAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: BeatSumAggregateInputType
+    _sum?: MasterTrackSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: BeatMinAggregateInputType
+    _min?: MasterTrackMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: BeatMaxAggregateInputType
+    _max?: MasterTrackMaxAggregateInputType
   }
 
-  export type GetBeatAggregateType<T extends BeatAggregateArgs> = {
-        [P in keyof T & keyof AggregateBeat]: P extends '_count' | 'count'
+  export type GetMasterTrackAggregateType<T extends MasterTrackAggregateArgs> = {
+        [P in keyof T & keyof AggregateMasterTrack]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateBeat[P]>
-      : GetScalarType<T[P], AggregateBeat[P]>
+        : GetScalarType<T[P], AggregateMasterTrack[P]>
+      : GetScalarType<T[P], AggregateMasterTrack[P]>
   }
 
 
 
 
-  export type BeatGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BeatWhereInput
-    orderBy?: BeatOrderByWithAggregationInput | BeatOrderByWithAggregationInput[]
-    by: BeatScalarFieldEnum[] | BeatScalarFieldEnum
-    having?: BeatScalarWhereWithAggregatesInput
+  export type MasterTrackGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MasterTrackWhereInput
+    orderBy?: MasterTrackOrderByWithAggregationInput | MasterTrackOrderByWithAggregationInput[]
+    by: MasterTrackScalarFieldEnum[] | MasterTrackScalarFieldEnum
+    having?: MasterTrackScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: BeatCountAggregateInputType | true
-    _avg?: BeatAvgAggregateInputType
-    _sum?: BeatSumAggregateInputType
-    _min?: BeatMinAggregateInputType
-    _max?: BeatMaxAggregateInputType
+    _count?: MasterTrackCountAggregateInputType | true
+    _avg?: MasterTrackAvgAggregateInputType
+    _sum?: MasterTrackSumAggregateInputType
+    _min?: MasterTrackMinAggregateInputType
+    _max?: MasterTrackMaxAggregateInputType
   }
 
-  export type BeatGroupByOutputType = {
+  export type MasterTrackGroupByOutputType = {
     id: string
     title: string
+    slug: string
     bpm: number
-    key: string
+    musicalKey: string
     genre: string
-    mp3Url: string
-    wavUrl: string
-    stemsUrl: string
+    subGenre: string | null
+    moodTags: string[]
+    taggedMp3Url: string
+    untaggedWavUrl: string
+    stemsZipUrl: string
     coverArtUrl: string
     priceMp3: number
     priceWav: number
     priceStems: number
-    priceExcl: number
+    priceExclusive: number
+    isExclusiveSold: boolean
+    isVaultLocked: boolean
+    playCount: number
+    downloadCount: number
     createdAt: Date
-    _count: BeatCountAggregateOutputType | null
-    _avg: BeatAvgAggregateOutputType | null
-    _sum: BeatSumAggregateOutputType | null
-    _min: BeatMinAggregateOutputType | null
-    _max: BeatMaxAggregateOutputType | null
+    updatedAt: Date
+    _count: MasterTrackCountAggregateOutputType | null
+    _avg: MasterTrackAvgAggregateOutputType | null
+    _sum: MasterTrackSumAggregateOutputType | null
+    _min: MasterTrackMinAggregateOutputType | null
+    _max: MasterTrackMaxAggregateOutputType | null
   }
 
-  type GetBeatGroupByPayload<T extends BeatGroupByArgs> = Prisma.PrismaPromise<
+  type GetMasterTrackGroupByPayload<T extends MasterTrackGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<BeatGroupByOutputType, T['by']> &
+      PickEnumerable<MasterTrackGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof BeatGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof MasterTrackGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], BeatGroupByOutputType[P]>
-            : GetScalarType<T[P], BeatGroupByOutputType[P]>
+              : GetScalarType<T[P], MasterTrackGroupByOutputType[P]>
+            : GetScalarType<T[P], MasterTrackGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type BeatSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type MasterTrackSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    slug?: boolean
     bpm?: boolean
-    key?: boolean
+    musicalKey?: boolean
     genre?: boolean
-    mp3Url?: boolean
-    wavUrl?: boolean
-    stemsUrl?: boolean
+    subGenre?: boolean
+    moodTags?: boolean
+    taggedMp3Url?: boolean
+    untaggedWavUrl?: boolean
+    stemsZipUrl?: boolean
     coverArtUrl?: boolean
     priceMp3?: boolean
     priceWav?: boolean
     priceStems?: boolean
-    priceExcl?: boolean
+    priceExclusive?: boolean
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: boolean
+    downloadCount?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["beat"]>
+    updatedAt?: boolean
+    sales?: boolean | MasterTrack$salesArgs<ExtArgs>
+    _count?: boolean | MasterTrackCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["masterTrack"]>
 
-  export type BeatSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type MasterTrackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    slug?: boolean
     bpm?: boolean
-    key?: boolean
+    musicalKey?: boolean
     genre?: boolean
-    mp3Url?: boolean
-    wavUrl?: boolean
-    stemsUrl?: boolean
+    subGenre?: boolean
+    moodTags?: boolean
+    taggedMp3Url?: boolean
+    untaggedWavUrl?: boolean
+    stemsZipUrl?: boolean
     coverArtUrl?: boolean
     priceMp3?: boolean
     priceWav?: boolean
     priceStems?: boolean
-    priceExcl?: boolean
+    priceExclusive?: boolean
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: boolean
+    downloadCount?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["beat"]>
+    updatedAt?: boolean
+  }, ExtArgs["result"]["masterTrack"]>
 
-  export type BeatSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type MasterTrackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    slug?: boolean
     bpm?: boolean
-    key?: boolean
+    musicalKey?: boolean
     genre?: boolean
-    mp3Url?: boolean
-    wavUrl?: boolean
-    stemsUrl?: boolean
+    subGenre?: boolean
+    moodTags?: boolean
+    taggedMp3Url?: boolean
+    untaggedWavUrl?: boolean
+    stemsZipUrl?: boolean
     coverArtUrl?: boolean
     priceMp3?: boolean
     priceWav?: boolean
     priceStems?: boolean
-    priceExcl?: boolean
+    priceExclusive?: boolean
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: boolean
+    downloadCount?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["beat"]>
+    updatedAt?: boolean
+  }, ExtArgs["result"]["masterTrack"]>
 
-  export type BeatSelectScalar = {
+  export type MasterTrackSelectScalar = {
     id?: boolean
     title?: boolean
+    slug?: boolean
     bpm?: boolean
-    key?: boolean
+    musicalKey?: boolean
     genre?: boolean
-    mp3Url?: boolean
-    wavUrl?: boolean
-    stemsUrl?: boolean
+    subGenre?: boolean
+    moodTags?: boolean
+    taggedMp3Url?: boolean
+    untaggedWavUrl?: boolean
+    stemsZipUrl?: boolean
     coverArtUrl?: boolean
     priceMp3?: boolean
     priceWav?: boolean
     priceStems?: boolean
-    priceExcl?: boolean
+    priceExclusive?: boolean
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: boolean
+    downloadCount?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type BeatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "bpm" | "key" | "genre" | "mp3Url" | "wavUrl" | "stemsUrl" | "coverArtUrl" | "priceMp3" | "priceWav" | "priceStems" | "priceExcl" | "createdAt", ExtArgs["result"]["beat"]>
+  export type MasterTrackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "bpm" | "musicalKey" | "genre" | "subGenre" | "moodTags" | "taggedMp3Url" | "untaggedWavUrl" | "stemsZipUrl" | "coverArtUrl" | "priceMp3" | "priceWav" | "priceStems" | "priceExclusive" | "isExclusiveSold" | "isVaultLocked" | "playCount" | "downloadCount" | "createdAt" | "updatedAt", ExtArgs["result"]["masterTrack"]>
+  export type MasterTrackInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sales?: boolean | MasterTrack$salesArgs<ExtArgs>
+    _count?: boolean | MasterTrackCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MasterTrackIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MasterTrackIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $BeatPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Beat"
-    objects: {}
+  export type $MasterTrackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MasterTrack"
+    objects: {
+      sales: Prisma.$TransactionPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
+      slug: string
       bpm: number
-      key: string
+      musicalKey: string
       genre: string
-      mp3Url: string
-      wavUrl: string
-      stemsUrl: string
+      subGenre: string | null
+      moodTags: string[]
+      taggedMp3Url: string
+      untaggedWavUrl: string
+      stemsZipUrl: string
       coverArtUrl: string
       priceMp3: number
       priceWav: number
       priceStems: number
-      priceExcl: number
+      priceExclusive: number
+      isExclusiveSold: boolean
+      isVaultLocked: boolean
+      playCount: number
+      downloadCount: number
       createdAt: Date
-    }, ExtArgs["result"]["beat"]>
+      updatedAt: Date
+    }, ExtArgs["result"]["masterTrack"]>
     composites: {}
   }
 
-  type BeatGetPayload<S extends boolean | null | undefined | BeatDefaultArgs> = $Result.GetResult<Prisma.$BeatPayload, S>
+  type MasterTrackGetPayload<S extends boolean | null | undefined | MasterTrackDefaultArgs> = $Result.GetResult<Prisma.$MasterTrackPayload, S>
 
-  type BeatCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<BeatFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: BeatCountAggregateInputType | true
+  type MasterTrackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MasterTrackFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MasterTrackCountAggregateInputType | true
     }
 
-  export interface BeatDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Beat'], meta: { name: 'Beat' } }
+  export interface MasterTrackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MasterTrack'], meta: { name: 'MasterTrack' } }
     /**
-     * Find zero or one Beat that matches the filter.
-     * @param {BeatFindUniqueArgs} args - Arguments to find a Beat
+     * Find zero or one MasterTrack that matches the filter.
+     * @param {MasterTrackFindUniqueArgs} args - Arguments to find a MasterTrack
      * @example
-     * // Get one Beat
-     * const beat = await prisma.beat.findUnique({
+     * // Get one MasterTrack
+     * const masterTrack = await prisma.masterTrack.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends BeatFindUniqueArgs>(args: SelectSubset<T, BeatFindUniqueArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends MasterTrackFindUniqueArgs>(args: SelectSubset<T, MasterTrackFindUniqueArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Beat that matches the filter or throw an error with `error.code='P2025'`
+     * Find one MasterTrack that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {BeatFindUniqueOrThrowArgs} args - Arguments to find a Beat
+     * @param {MasterTrackFindUniqueOrThrowArgs} args - Arguments to find a MasterTrack
      * @example
-     * // Get one Beat
-     * const beat = await prisma.beat.findUniqueOrThrow({
+     * // Get one MasterTrack
+     * const masterTrack = await prisma.masterTrack.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends BeatFindUniqueOrThrowArgs>(args: SelectSubset<T, BeatFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends MasterTrackFindUniqueOrThrowArgs>(args: SelectSubset<T, MasterTrackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Beat that matches the filter.
+     * Find the first MasterTrack that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatFindFirstArgs} args - Arguments to find a Beat
+     * @param {MasterTrackFindFirstArgs} args - Arguments to find a MasterTrack
      * @example
-     * // Get one Beat
-     * const beat = await prisma.beat.findFirst({
+     * // Get one MasterTrack
+     * const masterTrack = await prisma.masterTrack.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends BeatFindFirstArgs>(args?: SelectSubset<T, BeatFindFirstArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends MasterTrackFindFirstArgs>(args?: SelectSubset<T, MasterTrackFindFirstArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Beat that matches the filter or
+     * Find the first MasterTrack that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatFindFirstOrThrowArgs} args - Arguments to find a Beat
+     * @param {MasterTrackFindFirstOrThrowArgs} args - Arguments to find a MasterTrack
      * @example
-     * // Get one Beat
-     * const beat = await prisma.beat.findFirstOrThrow({
+     * // Get one MasterTrack
+     * const masterTrack = await prisma.masterTrack.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends BeatFindFirstOrThrowArgs>(args?: SelectSubset<T, BeatFindFirstOrThrowArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends MasterTrackFindFirstOrThrowArgs>(args?: SelectSubset<T, MasterTrackFindFirstOrThrowArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Beats that matches the filter.
+     * Find zero or more MasterTracks that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {MasterTrackFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Beats
-     * const beats = await prisma.beat.findMany()
+     * // Get all MasterTracks
+     * const masterTracks = await prisma.masterTrack.findMany()
      * 
-     * // Get first 10 Beats
-     * const beats = await prisma.beat.findMany({ take: 10 })
+     * // Get first 10 MasterTracks
+     * const masterTracks = await prisma.masterTrack.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const beatWithIdOnly = await prisma.beat.findMany({ select: { id: true } })
+     * const masterTrackWithIdOnly = await prisma.masterTrack.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends BeatFindManyArgs>(args?: SelectSubset<T, BeatFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends MasterTrackFindManyArgs>(args?: SelectSubset<T, MasterTrackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Beat.
-     * @param {BeatCreateArgs} args - Arguments to create a Beat.
+     * Create a MasterTrack.
+     * @param {MasterTrackCreateArgs} args - Arguments to create a MasterTrack.
      * @example
-     * // Create one Beat
-     * const Beat = await prisma.beat.create({
+     * // Create one MasterTrack
+     * const MasterTrack = await prisma.masterTrack.create({
      *   data: {
-     *     // ... data to create a Beat
+     *     // ... data to create a MasterTrack
      *   }
      * })
      * 
      */
-    create<T extends BeatCreateArgs>(args: SelectSubset<T, BeatCreateArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends MasterTrackCreateArgs>(args: SelectSubset<T, MasterTrackCreateArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Beats.
-     * @param {BeatCreateManyArgs} args - Arguments to create many Beats.
+     * Create many MasterTracks.
+     * @param {MasterTrackCreateManyArgs} args - Arguments to create many MasterTracks.
      * @example
-     * // Create many Beats
-     * const beat = await prisma.beat.createMany({
+     * // Create many MasterTracks
+     * const masterTrack = await prisma.masterTrack.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends BeatCreateManyArgs>(args?: SelectSubset<T, BeatCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends MasterTrackCreateManyArgs>(args?: SelectSubset<T, MasterTrackCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Beats and returns the data saved in the database.
-     * @param {BeatCreateManyAndReturnArgs} args - Arguments to create many Beats.
+     * Create many MasterTracks and returns the data saved in the database.
+     * @param {MasterTrackCreateManyAndReturnArgs} args - Arguments to create many MasterTracks.
      * @example
-     * // Create many Beats
-     * const beat = await prisma.beat.createManyAndReturn({
+     * // Create many MasterTracks
+     * const masterTrack = await prisma.masterTrack.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Beats and only return the `id`
-     * const beatWithIdOnly = await prisma.beat.createManyAndReturn({
+     * // Create many MasterTracks and only return the `id`
+     * const masterTrackWithIdOnly = await prisma.masterTrack.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -1392,28 +1623,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends BeatCreateManyAndReturnArgs>(args?: SelectSubset<T, BeatCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends MasterTrackCreateManyAndReturnArgs>(args?: SelectSubset<T, MasterTrackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Beat.
-     * @param {BeatDeleteArgs} args - Arguments to delete one Beat.
+     * Delete a MasterTrack.
+     * @param {MasterTrackDeleteArgs} args - Arguments to delete one MasterTrack.
      * @example
-     * // Delete one Beat
-     * const Beat = await prisma.beat.delete({
+     * // Delete one MasterTrack
+     * const MasterTrack = await prisma.masterTrack.delete({
      *   where: {
-     *     // ... filter to delete one Beat
+     *     // ... filter to delete one MasterTrack
      *   }
      * })
      * 
      */
-    delete<T extends BeatDeleteArgs>(args: SelectSubset<T, BeatDeleteArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends MasterTrackDeleteArgs>(args: SelectSubset<T, MasterTrackDeleteArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Beat.
-     * @param {BeatUpdateArgs} args - Arguments to update one Beat.
+     * Update one MasterTrack.
+     * @param {MasterTrackUpdateArgs} args - Arguments to update one MasterTrack.
      * @example
-     * // Update one Beat
-     * const beat = await prisma.beat.update({
+     * // Update one MasterTrack
+     * const masterTrack = await prisma.masterTrack.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1423,30 +1654,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends BeatUpdateArgs>(args: SelectSubset<T, BeatUpdateArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends MasterTrackUpdateArgs>(args: SelectSubset<T, MasterTrackUpdateArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Beats.
-     * @param {BeatDeleteManyArgs} args - Arguments to filter Beats to delete.
+     * Delete zero or more MasterTracks.
+     * @param {MasterTrackDeleteManyArgs} args - Arguments to filter MasterTracks to delete.
      * @example
-     * // Delete a few Beats
-     * const { count } = await prisma.beat.deleteMany({
+     * // Delete a few MasterTracks
+     * const { count } = await prisma.masterTrack.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends BeatDeleteManyArgs>(args?: SelectSubset<T, BeatDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends MasterTrackDeleteManyArgs>(args?: SelectSubset<T, MasterTrackDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Beats.
+     * Update zero or more MasterTracks.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {MasterTrackUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Beats
-     * const beat = await prisma.beat.updateMany({
+     * // Update many MasterTracks
+     * const masterTrack = await prisma.masterTrack.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1456,14 +1687,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends BeatUpdateManyArgs>(args: SelectSubset<T, BeatUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends MasterTrackUpdateManyArgs>(args: SelectSubset<T, MasterTrackUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Beats and returns the data updated in the database.
-     * @param {BeatUpdateManyAndReturnArgs} args - Arguments to update many Beats.
+     * Update zero or more MasterTracks and returns the data updated in the database.
+     * @param {MasterTrackUpdateManyAndReturnArgs} args - Arguments to update many MasterTracks.
      * @example
-     * // Update many Beats
-     * const beat = await prisma.beat.updateManyAndReturn({
+     * // Update many MasterTracks
+     * const masterTrack = await prisma.masterTrack.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1472,8 +1703,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Beats and only return the `id`
-     * const beatWithIdOnly = await prisma.beat.updateManyAndReturn({
+     * // Update zero or more MasterTracks and only return the `id`
+     * const masterTrackWithIdOnly = await prisma.masterTrack.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -1486,56 +1717,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends BeatUpdateManyAndReturnArgs>(args: SelectSubset<T, BeatUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends MasterTrackUpdateManyAndReturnArgs>(args: SelectSubset<T, MasterTrackUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Beat.
-     * @param {BeatUpsertArgs} args - Arguments to update or create a Beat.
+     * Create or update one MasterTrack.
+     * @param {MasterTrackUpsertArgs} args - Arguments to update or create a MasterTrack.
      * @example
-     * // Update or create a Beat
-     * const beat = await prisma.beat.upsert({
+     * // Update or create a MasterTrack
+     * const masterTrack = await prisma.masterTrack.upsert({
      *   create: {
-     *     // ... data to create a Beat
+     *     // ... data to create a MasterTrack
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Beat we want to update
+     *     // ... the filter for the MasterTrack we want to update
      *   }
      * })
      */
-    upsert<T extends BeatUpsertArgs>(args: SelectSubset<T, BeatUpsertArgs<ExtArgs>>): Prisma__BeatClient<$Result.GetResult<Prisma.$BeatPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends MasterTrackUpsertArgs>(args: SelectSubset<T, MasterTrackUpsertArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Beats.
+     * Count the number of MasterTracks.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatCountArgs} args - Arguments to filter Beats to count.
+     * @param {MasterTrackCountArgs} args - Arguments to filter MasterTracks to count.
      * @example
-     * // Count the number of Beats
-     * const count = await prisma.beat.count({
+     * // Count the number of MasterTracks
+     * const count = await prisma.masterTrack.count({
      *   where: {
-     *     // ... the filter for the Beats we want to count
+     *     // ... the filter for the MasterTracks we want to count
      *   }
      * })
     **/
-    count<T extends BeatCountArgs>(
-      args?: Subset<T, BeatCountArgs>,
+    count<T extends MasterTrackCountArgs>(
+      args?: Subset<T, MasterTrackCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], BeatCountAggregateOutputType>
+          : GetScalarType<T['select'], MasterTrackCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Beat.
+     * Allows you to perform aggregations operations on a MasterTrack.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {MasterTrackAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -1555,13 +1786,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends BeatAggregateArgs>(args: Subset<T, BeatAggregateArgs>): Prisma.PrismaPromise<GetBeatAggregateType<T>>
+    aggregate<T extends MasterTrackAggregateArgs>(args: Subset<T, MasterTrackAggregateArgs>): Prisma.PrismaPromise<GetMasterTrackAggregateType<T>>
 
     /**
-     * Group by Beat.
+     * Group by MasterTrack.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeatGroupByArgs} args - Group by arguments.
+     * @param {MasterTrackGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -1576,14 +1807,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends BeatGroupByArgs,
+      T extends MasterTrackGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: BeatGroupByArgs['orderBy'] }
-        : { orderBy?: BeatGroupByArgs['orderBy'] },
+        ? { orderBy: MasterTrackGroupByArgs['orderBy'] }
+        : { orderBy?: MasterTrackGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -1632,21 +1863,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, BeatGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBeatGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, MasterTrackGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMasterTrackGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Beat model
+   * Fields of the MasterTrack model
    */
-  readonly fields: BeatFieldRefs;
+  readonly fields: MasterTrackFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Beat.
+   * The delegate class that acts as a "Promise-like" for MasterTrack.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__BeatClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__MasterTrackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    sales<T extends MasterTrack$salesArgs<ExtArgs> = {}>(args?: Subset<T, MasterTrack$salesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1673,391 +1905,1599 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Beat model
+   * Fields of the MasterTrack model
    */
-  interface BeatFieldRefs {
-    readonly id: FieldRef<"Beat", 'String'>
-    readonly title: FieldRef<"Beat", 'String'>
-    readonly bpm: FieldRef<"Beat", 'Int'>
-    readonly key: FieldRef<"Beat", 'String'>
-    readonly genre: FieldRef<"Beat", 'String'>
-    readonly mp3Url: FieldRef<"Beat", 'String'>
-    readonly wavUrl: FieldRef<"Beat", 'String'>
-    readonly stemsUrl: FieldRef<"Beat", 'String'>
-    readonly coverArtUrl: FieldRef<"Beat", 'String'>
-    readonly priceMp3: FieldRef<"Beat", 'Float'>
-    readonly priceWav: FieldRef<"Beat", 'Float'>
-    readonly priceStems: FieldRef<"Beat", 'Float'>
-    readonly priceExcl: FieldRef<"Beat", 'Float'>
-    readonly createdAt: FieldRef<"Beat", 'DateTime'>
+  interface MasterTrackFieldRefs {
+    readonly id: FieldRef<"MasterTrack", 'String'>
+    readonly title: FieldRef<"MasterTrack", 'String'>
+    readonly slug: FieldRef<"MasterTrack", 'String'>
+    readonly bpm: FieldRef<"MasterTrack", 'Int'>
+    readonly musicalKey: FieldRef<"MasterTrack", 'String'>
+    readonly genre: FieldRef<"MasterTrack", 'String'>
+    readonly subGenre: FieldRef<"MasterTrack", 'String'>
+    readonly moodTags: FieldRef<"MasterTrack", 'String[]'>
+    readonly taggedMp3Url: FieldRef<"MasterTrack", 'String'>
+    readonly untaggedWavUrl: FieldRef<"MasterTrack", 'String'>
+    readonly stemsZipUrl: FieldRef<"MasterTrack", 'String'>
+    readonly coverArtUrl: FieldRef<"MasterTrack", 'String'>
+    readonly priceMp3: FieldRef<"MasterTrack", 'Float'>
+    readonly priceWav: FieldRef<"MasterTrack", 'Float'>
+    readonly priceStems: FieldRef<"MasterTrack", 'Float'>
+    readonly priceExclusive: FieldRef<"MasterTrack", 'Float'>
+    readonly isExclusiveSold: FieldRef<"MasterTrack", 'Boolean'>
+    readonly isVaultLocked: FieldRef<"MasterTrack", 'Boolean'>
+    readonly playCount: FieldRef<"MasterTrack", 'Int'>
+    readonly downloadCount: FieldRef<"MasterTrack", 'Int'>
+    readonly createdAt: FieldRef<"MasterTrack", 'DateTime'>
+    readonly updatedAt: FieldRef<"MasterTrack", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Beat findUnique
+   * MasterTrack findUnique
    */
-  export type BeatFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * Filter, which Beat to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where: BeatWhereUniqueInput
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which MasterTrack to fetch.
+     */
+    where: MasterTrackWhereUniqueInput
   }
 
   /**
-   * Beat findUniqueOrThrow
+   * MasterTrack findUniqueOrThrow
    */
-  export type BeatFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * Filter, which Beat to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where: BeatWhereUniqueInput
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which MasterTrack to fetch.
+     */
+    where: MasterTrackWhereUniqueInput
   }
 
   /**
-   * Beat findFirst
+   * MasterTrack findFirst
    */
-  export type BeatFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * Filter, which Beat to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where?: BeatWhereInput
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which MasterTrack to fetch.
+     */
+    where?: MasterTrackWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beats to fetch.
+     * Determine the order of MasterTracks to fetch.
      */
-    orderBy?: BeatOrderByWithRelationInput | BeatOrderByWithRelationInput[]
+    orderBy?: MasterTrackOrderByWithRelationInput | MasterTrackOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Beats.
+     * Sets the position for searching for MasterTracks.
      */
-    cursor?: BeatWhereUniqueInput
+    cursor?: MasterTrackWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beats from the position of the cursor.
+     * Take `±n` MasterTracks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beats.
+     * Skip the first `n` MasterTracks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Beats.
+     * Filter by unique combinations of MasterTracks.
      */
-    distinct?: BeatScalarFieldEnum | BeatScalarFieldEnum[]
+    distinct?: MasterTrackScalarFieldEnum | MasterTrackScalarFieldEnum[]
   }
 
   /**
-   * Beat findFirstOrThrow
+   * MasterTrack findFirstOrThrow
    */
-  export type BeatFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * Filter, which Beat to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where?: BeatWhereInput
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which MasterTrack to fetch.
+     */
+    where?: MasterTrackWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beats to fetch.
+     * Determine the order of MasterTracks to fetch.
      */
-    orderBy?: BeatOrderByWithRelationInput | BeatOrderByWithRelationInput[]
+    orderBy?: MasterTrackOrderByWithRelationInput | MasterTrackOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Beats.
+     * Sets the position for searching for MasterTracks.
      */
-    cursor?: BeatWhereUniqueInput
+    cursor?: MasterTrackWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beats from the position of the cursor.
+     * Take `±n` MasterTracks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beats.
+     * Skip the first `n` MasterTracks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Beats.
+     * Filter by unique combinations of MasterTracks.
      */
-    distinct?: BeatScalarFieldEnum | BeatScalarFieldEnum[]
+    distinct?: MasterTrackScalarFieldEnum | MasterTrackScalarFieldEnum[]
   }
 
   /**
-   * Beat findMany
+   * MasterTrack findMany
    */
-  export type BeatFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * Filter, which Beats to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where?: BeatWhereInput
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which MasterTracks to fetch.
+     */
+    where?: MasterTrackWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beats to fetch.
+     * Determine the order of MasterTracks to fetch.
      */
-    orderBy?: BeatOrderByWithRelationInput | BeatOrderByWithRelationInput[]
+    orderBy?: MasterTrackOrderByWithRelationInput | MasterTrackOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Beats.
+     * Sets the position for listing MasterTracks.
      */
-    cursor?: BeatWhereUniqueInput
+    cursor?: MasterTrackWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beats from the position of the cursor.
+     * Take `±n` MasterTracks from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beats.
+     * Skip the first `n` MasterTracks.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Beats.
+     * Filter by unique combinations of MasterTracks.
      */
-    distinct?: BeatScalarFieldEnum | BeatScalarFieldEnum[]
+    distinct?: MasterTrackScalarFieldEnum | MasterTrackScalarFieldEnum[]
   }
 
   /**
-   * Beat create
+   * MasterTrack create
    */
-  export type BeatCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * The data needed to create a Beat.
+     * Choose, which related nodes to fetch as well
      */
-    data: XOR<BeatCreateInput, BeatUncheckedCreateInput>
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MasterTrack.
+     */
+    data: XOR<MasterTrackCreateInput, MasterTrackUncheckedCreateInput>
   }
 
   /**
-   * Beat createMany
+   * MasterTrack createMany
    */
-  export type BeatCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Beats.
+     * The data used to create many MasterTracks.
      */
-    data: BeatCreateManyInput | BeatCreateManyInput[]
+    data: MasterTrackCreateManyInput | MasterTrackCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Beat createManyAndReturn
+   * MasterTrack createManyAndReturn
    */
-  export type BeatCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelectCreateManyAndReturn<ExtArgs> | null
+    select?: MasterTrackSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * The data used to create many Beats.
+     * The data used to create many MasterTracks.
      */
-    data: BeatCreateManyInput | BeatCreateManyInput[]
+    data: MasterTrackCreateManyInput | MasterTrackCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Beat update
+   * MasterTrack update
    */
-  export type BeatUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * The data needed to update a Beat.
+     * Choose, which related nodes to fetch as well
      */
-    data: XOR<BeatUpdateInput, BeatUncheckedUpdateInput>
+    include?: MasterTrackInclude<ExtArgs> | null
     /**
-     * Choose, which Beat to update.
+     * The data needed to update a MasterTrack.
      */
-    where: BeatWhereUniqueInput
+    data: XOR<MasterTrackUpdateInput, MasterTrackUncheckedUpdateInput>
+    /**
+     * Choose, which MasterTrack to update.
+     */
+    where: MasterTrackWhereUniqueInput
   }
 
   /**
-   * Beat updateMany
+   * MasterTrack updateMany
    */
-  export type BeatUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Beats.
+     * The data used to update MasterTracks.
      */
-    data: XOR<BeatUpdateManyMutationInput, BeatUncheckedUpdateManyInput>
+    data: XOR<MasterTrackUpdateManyMutationInput, MasterTrackUncheckedUpdateManyInput>
     /**
-     * Filter which Beats to update
+     * Filter which MasterTracks to update
      */
-    where?: BeatWhereInput
+    where?: MasterTrackWhereInput
     /**
-     * Limit how many Beats to update.
+     * Limit how many MasterTracks to update.
      */
     limit?: number
   }
 
   /**
-   * Beat updateManyAndReturn
+   * MasterTrack updateManyAndReturn
    */
-  export type BeatUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: MasterTrackSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * The data used to update Beats.
+     * The data used to update MasterTracks.
      */
-    data: XOR<BeatUpdateManyMutationInput, BeatUncheckedUpdateManyInput>
+    data: XOR<MasterTrackUpdateManyMutationInput, MasterTrackUncheckedUpdateManyInput>
     /**
-     * Filter which Beats to update
+     * Filter which MasterTracks to update
      */
-    where?: BeatWhereInput
+    where?: MasterTrackWhereInput
     /**
-     * Limit how many Beats to update.
+     * Limit how many MasterTracks to update.
      */
     limit?: number
   }
 
   /**
-   * Beat upsert
+   * MasterTrack upsert
    */
-  export type BeatUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * The filter to search for the Beat to update in case it exists.
+     * Choose, which related nodes to fetch as well
      */
-    where: BeatWhereUniqueInput
+    include?: MasterTrackInclude<ExtArgs> | null
     /**
-     * In case the Beat found by the `where` argument doesn't exist, create a new Beat with this data.
+     * The filter to search for the MasterTrack to update in case it exists.
      */
-    create: XOR<BeatCreateInput, BeatUncheckedCreateInput>
+    where: MasterTrackWhereUniqueInput
     /**
-     * In case the Beat was found with the provided `where` argument, update it with this data.
+     * In case the MasterTrack found by the `where` argument doesn't exist, create a new MasterTrack with this data.
      */
-    update: XOR<BeatUpdateInput, BeatUncheckedUpdateInput>
+    create: XOR<MasterTrackCreateInput, MasterTrackUncheckedCreateInput>
+    /**
+     * In case the MasterTrack was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MasterTrackUpdateInput, MasterTrackUncheckedUpdateInput>
   }
 
   /**
-   * Beat delete
+   * MasterTrack delete
    */
-  export type BeatDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the MasterTrack
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: MasterTrackSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the MasterTrack
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: MasterTrackOmit<ExtArgs> | null
     /**
-     * Filter which Beat to delete.
+     * Choose, which related nodes to fetch as well
      */
-    where: BeatWhereUniqueInput
+    include?: MasterTrackInclude<ExtArgs> | null
+    /**
+     * Filter which MasterTrack to delete.
+     */
+    where: MasterTrackWhereUniqueInput
   }
 
   /**
-   * Beat deleteMany
+   * MasterTrack deleteMany
    */
-  export type BeatDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrackDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Beats to delete
+     * Filter which MasterTracks to delete
      */
-    where?: BeatWhereInput
+    where?: MasterTrackWhereInput
     /**
-     * Limit how many Beats to delete.
+     * Limit how many MasterTracks to delete.
      */
     limit?: number
   }
 
   /**
-   * Beat without action
+   * MasterTrack.sales
    */
-  export type BeatDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MasterTrack$salesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Beat
+     * Select specific fields to fetch from the Transaction
      */
-    select?: BeatSelect<ExtArgs> | null
+    select?: TransactionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Beat
+     * Omit specific fields from the Transaction
      */
-    omit?: BeatOmit<ExtArgs> | null
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * MasterTrack without action
+   */
+  export type MasterTrackDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MasterTrack
+     */
+    select?: MasterTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MasterTrack
+     */
+    omit?: MasterTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MasterTrackInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Transaction
+   */
+
+  export type AggregateTransaction = {
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  export type TransactionAvgAggregateOutputType = {
+    amountPaid: number | null
+  }
+
+  export type TransactionSumAggregateOutputType = {
+    amountPaid: number | null
+  }
+
+  export type TransactionMinAggregateOutputType = {
+    id: string | null
+    trackId: string | null
+    buyerEmail: string | null
+    licenseType: string | null
+    amountPaid: number | null
+    paymentGateway: string | null
+    licensePdfUrl: string | null
+    createdAt: Date | null
+  }
+
+  export type TransactionMaxAggregateOutputType = {
+    id: string | null
+    trackId: string | null
+    buyerEmail: string | null
+    licenseType: string | null
+    amountPaid: number | null
+    paymentGateway: string | null
+    licensePdfUrl: string | null
+    createdAt: Date | null
+  }
+
+  export type TransactionCountAggregateOutputType = {
+    id: number
+    trackId: number
+    buyerEmail: number
+    licenseType: number
+    amountPaid: number
+    paymentGateway: number
+    licensePdfUrl: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TransactionAvgAggregateInputType = {
+    amountPaid?: true
+  }
+
+  export type TransactionSumAggregateInputType = {
+    amountPaid?: true
+  }
+
+  export type TransactionMinAggregateInputType = {
+    id?: true
+    trackId?: true
+    buyerEmail?: true
+    licenseType?: true
+    amountPaid?: true
+    paymentGateway?: true
+    licensePdfUrl?: true
+    createdAt?: true
+  }
+
+  export type TransactionMaxAggregateInputType = {
+    id?: true
+    trackId?: true
+    buyerEmail?: true
+    licenseType?: true
+    amountPaid?: true
+    paymentGateway?: true
+    licensePdfUrl?: true
+    createdAt?: true
+  }
+
+  export type TransactionCountAggregateInputType = {
+    id?: true
+    trackId?: true
+    buyerEmail?: true
+    licenseType?: true
+    amountPaid?: true
+    paymentGateway?: true
+    licensePdfUrl?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transaction to aggregate.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Transactions
+    **/
+    _count?: true | TransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type GetTransactionAggregateType<T extends TransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransaction[P]>
+      : GetScalarType<T[P], AggregateTransaction[P]>
+  }
+
+
+
+
+  export type TransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithAggregationInput | TransactionOrderByWithAggregationInput[]
+    by: TransactionScalarFieldEnum[] | TransactionScalarFieldEnum
+    having?: TransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionCountAggregateInputType | true
+    _avg?: TransactionAvgAggregateInputType
+    _sum?: TransactionSumAggregateInputType
+    _min?: TransactionMinAggregateInputType
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type TransactionGroupByOutputType = {
+    id: string
+    trackId: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
+    createdAt: Date
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  type GetTransactionGroupByPayload<T extends TransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    trackId?: boolean
+    buyerEmail?: boolean
+    licenseType?: boolean
+    amountPaid?: boolean
+    paymentGateway?: boolean
+    licensePdfUrl?: boolean
+    createdAt?: boolean
+    track?: boolean | MasterTrackDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    trackId?: boolean
+    buyerEmail?: boolean
+    licenseType?: boolean
+    amountPaid?: boolean
+    paymentGateway?: boolean
+    licensePdfUrl?: boolean
+    createdAt?: boolean
+    track?: boolean | MasterTrackDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    trackId?: boolean
+    buyerEmail?: boolean
+    licenseType?: boolean
+    amountPaid?: boolean
+    paymentGateway?: boolean
+    licensePdfUrl?: boolean
+    createdAt?: boolean
+    track?: boolean | MasterTrackDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectScalar = {
+    id?: boolean
+    trackId?: boolean
+    buyerEmail?: boolean
+    licenseType?: boolean
+    amountPaid?: boolean
+    paymentGateway?: boolean
+    licensePdfUrl?: boolean
+    createdAt?: boolean
+  }
+
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "trackId" | "buyerEmail" | "licenseType" | "amountPaid" | "paymentGateway" | "licensePdfUrl" | "createdAt", ExtArgs["result"]["transaction"]>
+  export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    track?: boolean | MasterTrackDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    track?: boolean | MasterTrackDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    track?: boolean | MasterTrackDefaultArgs<ExtArgs>
+  }
+
+  export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Transaction"
+    objects: {
+      track: Prisma.$MasterTrackPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      trackId: string
+      buyerEmail: string
+      licenseType: string
+      amountPaid: number
+      paymentGateway: string
+      licensePdfUrl: string
+      createdAt: Date
+    }, ExtArgs["result"]["transaction"]>
+    composites: {}
+  }
+
+  type TransactionGetPayload<S extends boolean | null | undefined | TransactionDefaultArgs> = $Result.GetResult<Prisma.$TransactionPayload, S>
+
+  type TransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionCountAggregateInputType | true
+    }
+
+  export interface TransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Transaction'], meta: { name: 'Transaction' } }
+    /**
+     * Find zero or one Transaction that matches the filter.
+     * @param {TransactionFindUniqueArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionFindUniqueArgs>(args: SelectSubset<T, TransactionFindUniqueArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Transaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionFindUniqueOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionFindFirstArgs>(args?: SelectSubset<T, TransactionFindFirstArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Transactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Transactions
+     * const transactions = await prisma.transaction.findMany()
+     * 
+     * // Get first 10 Transactions
+     * const transactions = await prisma.transaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionWithIdOnly = await prisma.transaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionFindManyArgs>(args?: SelectSubset<T, TransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Transaction.
+     * @param {TransactionCreateArgs} args - Arguments to create a Transaction.
+     * @example
+     * // Create one Transaction
+     * const Transaction = await prisma.transaction.create({
+     *   data: {
+     *     // ... data to create a Transaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionCreateArgs>(args: SelectSubset<T, TransactionCreateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Transactions.
+     * @param {TransactionCreateManyArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionCreateManyArgs>(args?: SelectSubset<T, TransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Transactions and returns the data saved in the database.
+     * @param {TransactionCreateManyAndReturnArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Transaction.
+     * @param {TransactionDeleteArgs} args - Arguments to delete one Transaction.
+     * @example
+     * // Delete one Transaction
+     * const Transaction = await prisma.transaction.delete({
+     *   where: {
+     *     // ... filter to delete one Transaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionDeleteArgs>(args: SelectSubset<T, TransactionDeleteArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Transaction.
+     * @param {TransactionUpdateArgs} args - Arguments to update one Transaction.
+     * @example
+     * // Update one Transaction
+     * const transaction = await prisma.transaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionUpdateArgs>(args: SelectSubset<T, TransactionUpdateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Transactions.
+     * @param {TransactionDeleteManyArgs} args - Arguments to filter Transactions to delete.
+     * @example
+     * // Delete a few Transactions
+     * const { count } = await prisma.transaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionDeleteManyArgs>(args?: SelectSubset<T, TransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionUpdateManyArgs>(args: SelectSubset<T, TransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions and returns the data updated in the database.
+     * @param {TransactionUpdateManyAndReturnArgs} args - Arguments to update many Transactions.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Transaction.
+     * @param {TransactionUpsertArgs} args - Arguments to update or create a Transaction.
+     * @example
+     * // Update or create a Transaction
+     * const transaction = await prisma.transaction.upsert({
+     *   create: {
+     *     // ... data to create a Transaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Transaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionUpsertArgs>(args: SelectSubset<T, TransactionUpsertArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionCountArgs} args - Arguments to filter Transactions to count.
+     * @example
+     * // Count the number of Transactions
+     * const count = await prisma.transaction.count({
+     *   where: {
+     *     // ... the filter for the Transactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionCountArgs>(
+      args?: Subset<T, TransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionAggregateArgs>(args: Subset<T, TransactionAggregateArgs>): Prisma.PrismaPromise<GetTransactionAggregateType<T>>
+
+    /**
+     * Group by Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Transaction model
+   */
+  readonly fields: TransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Transaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    track<T extends MasterTrackDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MasterTrackDefaultArgs<ExtArgs>>): Prisma__MasterTrackClient<$Result.GetResult<Prisma.$MasterTrackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Transaction model
+   */
+  interface TransactionFieldRefs {
+    readonly id: FieldRef<"Transaction", 'String'>
+    readonly trackId: FieldRef<"Transaction", 'String'>
+    readonly buyerEmail: FieldRef<"Transaction", 'String'>
+    readonly licenseType: FieldRef<"Transaction", 'String'>
+    readonly amountPaid: FieldRef<"Transaction", 'Float'>
+    readonly paymentGateway: FieldRef<"Transaction", 'String'>
+    readonly licensePdfUrl: FieldRef<"Transaction", 'String'>
+    readonly createdAt: FieldRef<"Transaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Transaction findUnique
+   */
+  export type TransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findUniqueOrThrow
+   */
+  export type TransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findFirst
+   */
+  export type TransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findFirstOrThrow
+   */
+  export type TransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findMany
+   */
+  export type TransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transactions to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction create
+   */
+  export type TransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Transaction.
+     */
+    data: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+  }
+
+  /**
+   * Transaction createMany
+   */
+  export type TransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Transaction createManyAndReturn
+   */
+  export type TransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction update
+   */
+  export type TransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Transaction.
+     */
+    data: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+    /**
+     * Choose, which Transaction to update.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction updateMany
+   */
+  export type TransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction updateManyAndReturn
+   */
+  export type TransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction upsert
+   */
+  export type TransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Transaction to update in case it exists.
+     */
+    where: TransactionWhereUniqueInput
+    /**
+     * In case the Transaction found by the `where` argument doesn't exist, create a new Transaction with this data.
+     */
+    create: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+    /**
+     * In case the Transaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * Transaction delete
+   */
+  export type TransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter which Transaction to delete.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction deleteMany
+   */
+  export type TransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transactions to delete
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction without action
+   */
+  export type TransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
   }
 
 
@@ -2075,24 +3515,46 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const BeatScalarFieldEnum: {
+  export const MasterTrackScalarFieldEnum: {
     id: 'id',
     title: 'title',
+    slug: 'slug',
     bpm: 'bpm',
-    key: 'key',
+    musicalKey: 'musicalKey',
     genre: 'genre',
-    mp3Url: 'mp3Url',
-    wavUrl: 'wavUrl',
-    stemsUrl: 'stemsUrl',
+    subGenre: 'subGenre',
+    moodTags: 'moodTags',
+    taggedMp3Url: 'taggedMp3Url',
+    untaggedWavUrl: 'untaggedWavUrl',
+    stemsZipUrl: 'stemsZipUrl',
     coverArtUrl: 'coverArtUrl',
     priceMp3: 'priceMp3',
     priceWav: 'priceWav',
     priceStems: 'priceStems',
-    priceExcl: 'priceExcl',
+    priceExclusive: 'priceExclusive',
+    isExclusiveSold: 'isExclusiveSold',
+    isVaultLocked: 'isVaultLocked',
+    playCount: 'playCount',
+    downloadCount: 'downloadCount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MasterTrackScalarFieldEnum = (typeof MasterTrackScalarFieldEnum)[keyof typeof MasterTrackScalarFieldEnum]
+
+
+  export const TransactionScalarFieldEnum: {
+    id: 'id',
+    trackId: 'trackId',
+    buyerEmail: 'buyerEmail',
+    licenseType: 'licenseType',
+    amountPaid: 'amountPaid',
+    paymentGateway: 'paymentGateway',
+    licensePdfUrl: 'licensePdfUrl',
     createdAt: 'createdAt'
   };
 
-  export type BeatScalarFieldEnum = (typeof BeatScalarFieldEnum)[keyof typeof BeatScalarFieldEnum]
+  export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -2109,6 +3571,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -2159,6 +3629,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -2175,221 +3652,472 @@ export namespace Prisma {
    */
 
 
-  export type BeatWhereInput = {
-    AND?: BeatWhereInput | BeatWhereInput[]
-    OR?: BeatWhereInput[]
-    NOT?: BeatWhereInput | BeatWhereInput[]
-    id?: StringFilter<"Beat"> | string
-    title?: StringFilter<"Beat"> | string
-    bpm?: IntFilter<"Beat"> | number
-    key?: StringFilter<"Beat"> | string
-    genre?: StringFilter<"Beat"> | string
-    mp3Url?: StringFilter<"Beat"> | string
-    wavUrl?: StringFilter<"Beat"> | string
-    stemsUrl?: StringFilter<"Beat"> | string
-    coverArtUrl?: StringFilter<"Beat"> | string
-    priceMp3?: FloatFilter<"Beat"> | number
-    priceWav?: FloatFilter<"Beat"> | number
-    priceStems?: FloatFilter<"Beat"> | number
-    priceExcl?: FloatFilter<"Beat"> | number
-    createdAt?: DateTimeFilter<"Beat"> | Date | string
+  export type MasterTrackWhereInput = {
+    AND?: MasterTrackWhereInput | MasterTrackWhereInput[]
+    OR?: MasterTrackWhereInput[]
+    NOT?: MasterTrackWhereInput | MasterTrackWhereInput[]
+    id?: StringFilter<"MasterTrack"> | string
+    title?: StringFilter<"MasterTrack"> | string
+    slug?: StringFilter<"MasterTrack"> | string
+    bpm?: IntFilter<"MasterTrack"> | number
+    musicalKey?: StringFilter<"MasterTrack"> | string
+    genre?: StringFilter<"MasterTrack"> | string
+    subGenre?: StringNullableFilter<"MasterTrack"> | string | null
+    moodTags?: StringNullableListFilter<"MasterTrack">
+    taggedMp3Url?: StringFilter<"MasterTrack"> | string
+    untaggedWavUrl?: StringFilter<"MasterTrack"> | string
+    stemsZipUrl?: StringFilter<"MasterTrack"> | string
+    coverArtUrl?: StringFilter<"MasterTrack"> | string
+    priceMp3?: FloatFilter<"MasterTrack"> | number
+    priceWav?: FloatFilter<"MasterTrack"> | number
+    priceStems?: FloatFilter<"MasterTrack"> | number
+    priceExclusive?: FloatFilter<"MasterTrack"> | number
+    isExclusiveSold?: BoolFilter<"MasterTrack"> | boolean
+    isVaultLocked?: BoolFilter<"MasterTrack"> | boolean
+    playCount?: IntFilter<"MasterTrack"> | number
+    downloadCount?: IntFilter<"MasterTrack"> | number
+    createdAt?: DateTimeFilter<"MasterTrack"> | Date | string
+    updatedAt?: DateTimeFilter<"MasterTrack"> | Date | string
+    sales?: TransactionListRelationFilter
   }
 
-  export type BeatOrderByWithRelationInput = {
+  export type MasterTrackOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     bpm?: SortOrder
-    key?: SortOrder
+    musicalKey?: SortOrder
     genre?: SortOrder
-    mp3Url?: SortOrder
-    wavUrl?: SortOrder
-    stemsUrl?: SortOrder
+    subGenre?: SortOrderInput | SortOrder
+    moodTags?: SortOrder
+    taggedMp3Url?: SortOrder
+    untaggedWavUrl?: SortOrder
+    stemsZipUrl?: SortOrder
     coverArtUrl?: SortOrder
     priceMp3?: SortOrder
     priceWav?: SortOrder
     priceStems?: SortOrder
-    priceExcl?: SortOrder
+    priceExclusive?: SortOrder
+    isExclusiveSold?: SortOrder
+    isVaultLocked?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sales?: TransactionOrderByRelationAggregateInput
   }
 
-  export type BeatWhereUniqueInput = Prisma.AtLeast<{
+  export type MasterTrackWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: BeatWhereInput | BeatWhereInput[]
-    OR?: BeatWhereInput[]
-    NOT?: BeatWhereInput | BeatWhereInput[]
-    title?: StringFilter<"Beat"> | string
-    bpm?: IntFilter<"Beat"> | number
-    key?: StringFilter<"Beat"> | string
-    genre?: StringFilter<"Beat"> | string
-    mp3Url?: StringFilter<"Beat"> | string
-    wavUrl?: StringFilter<"Beat"> | string
-    stemsUrl?: StringFilter<"Beat"> | string
-    coverArtUrl?: StringFilter<"Beat"> | string
-    priceMp3?: FloatFilter<"Beat"> | number
-    priceWav?: FloatFilter<"Beat"> | number
-    priceStems?: FloatFilter<"Beat"> | number
-    priceExcl?: FloatFilter<"Beat"> | number
-    createdAt?: DateTimeFilter<"Beat"> | Date | string
+    slug?: string
+    AND?: MasterTrackWhereInput | MasterTrackWhereInput[]
+    OR?: MasterTrackWhereInput[]
+    NOT?: MasterTrackWhereInput | MasterTrackWhereInput[]
+    title?: StringFilter<"MasterTrack"> | string
+    bpm?: IntFilter<"MasterTrack"> | number
+    musicalKey?: StringFilter<"MasterTrack"> | string
+    genre?: StringFilter<"MasterTrack"> | string
+    subGenre?: StringNullableFilter<"MasterTrack"> | string | null
+    moodTags?: StringNullableListFilter<"MasterTrack">
+    taggedMp3Url?: StringFilter<"MasterTrack"> | string
+    untaggedWavUrl?: StringFilter<"MasterTrack"> | string
+    stemsZipUrl?: StringFilter<"MasterTrack"> | string
+    coverArtUrl?: StringFilter<"MasterTrack"> | string
+    priceMp3?: FloatFilter<"MasterTrack"> | number
+    priceWav?: FloatFilter<"MasterTrack"> | number
+    priceStems?: FloatFilter<"MasterTrack"> | number
+    priceExclusive?: FloatFilter<"MasterTrack"> | number
+    isExclusiveSold?: BoolFilter<"MasterTrack"> | boolean
+    isVaultLocked?: BoolFilter<"MasterTrack"> | boolean
+    playCount?: IntFilter<"MasterTrack"> | number
+    downloadCount?: IntFilter<"MasterTrack"> | number
+    createdAt?: DateTimeFilter<"MasterTrack"> | Date | string
+    updatedAt?: DateTimeFilter<"MasterTrack"> | Date | string
+    sales?: TransactionListRelationFilter
+  }, "id" | "slug">
+
+  export type MasterTrackOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    bpm?: SortOrder
+    musicalKey?: SortOrder
+    genre?: SortOrder
+    subGenre?: SortOrderInput | SortOrder
+    moodTags?: SortOrder
+    taggedMp3Url?: SortOrder
+    untaggedWavUrl?: SortOrder
+    stemsZipUrl?: SortOrder
+    coverArtUrl?: SortOrder
+    priceMp3?: SortOrder
+    priceWav?: SortOrder
+    priceStems?: SortOrder
+    priceExclusive?: SortOrder
+    isExclusiveSold?: SortOrder
+    isVaultLocked?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MasterTrackCountOrderByAggregateInput
+    _avg?: MasterTrackAvgOrderByAggregateInput
+    _max?: MasterTrackMaxOrderByAggregateInput
+    _min?: MasterTrackMinOrderByAggregateInput
+    _sum?: MasterTrackSumOrderByAggregateInput
+  }
+
+  export type MasterTrackScalarWhereWithAggregatesInput = {
+    AND?: MasterTrackScalarWhereWithAggregatesInput | MasterTrackScalarWhereWithAggregatesInput[]
+    OR?: MasterTrackScalarWhereWithAggregatesInput[]
+    NOT?: MasterTrackScalarWhereWithAggregatesInput | MasterTrackScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MasterTrack"> | string
+    title?: StringWithAggregatesFilter<"MasterTrack"> | string
+    slug?: StringWithAggregatesFilter<"MasterTrack"> | string
+    bpm?: IntWithAggregatesFilter<"MasterTrack"> | number
+    musicalKey?: StringWithAggregatesFilter<"MasterTrack"> | string
+    genre?: StringWithAggregatesFilter<"MasterTrack"> | string
+    subGenre?: StringNullableWithAggregatesFilter<"MasterTrack"> | string | null
+    moodTags?: StringNullableListFilter<"MasterTrack">
+    taggedMp3Url?: StringWithAggregatesFilter<"MasterTrack"> | string
+    untaggedWavUrl?: StringWithAggregatesFilter<"MasterTrack"> | string
+    stemsZipUrl?: StringWithAggregatesFilter<"MasterTrack"> | string
+    coverArtUrl?: StringWithAggregatesFilter<"MasterTrack"> | string
+    priceMp3?: FloatWithAggregatesFilter<"MasterTrack"> | number
+    priceWav?: FloatWithAggregatesFilter<"MasterTrack"> | number
+    priceStems?: FloatWithAggregatesFilter<"MasterTrack"> | number
+    priceExclusive?: FloatWithAggregatesFilter<"MasterTrack"> | number
+    isExclusiveSold?: BoolWithAggregatesFilter<"MasterTrack"> | boolean
+    isVaultLocked?: BoolWithAggregatesFilter<"MasterTrack"> | boolean
+    playCount?: IntWithAggregatesFilter<"MasterTrack"> | number
+    downloadCount?: IntWithAggregatesFilter<"MasterTrack"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"MasterTrack"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MasterTrack"> | Date | string
+  }
+
+  export type TransactionWhereInput = {
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    trackId?: StringFilter<"Transaction"> | string
+    buyerEmail?: StringFilter<"Transaction"> | string
+    licenseType?: StringFilter<"Transaction"> | string
+    amountPaid?: FloatFilter<"Transaction"> | number
+    paymentGateway?: StringFilter<"Transaction"> | string
+    licensePdfUrl?: StringFilter<"Transaction"> | string
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    track?: XOR<MasterTrackScalarRelationFilter, MasterTrackWhereInput>
+  }
+
+  export type TransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    trackId?: SortOrder
+    buyerEmail?: SortOrder
+    licenseType?: SortOrder
+    amountPaid?: SortOrder
+    paymentGateway?: SortOrder
+    licensePdfUrl?: SortOrder
+    createdAt?: SortOrder
+    track?: MasterTrackOrderByWithRelationInput
+  }
+
+  export type TransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    trackId?: StringFilter<"Transaction"> | string
+    buyerEmail?: StringFilter<"Transaction"> | string
+    licenseType?: StringFilter<"Transaction"> | string
+    amountPaid?: FloatFilter<"Transaction"> | number
+    paymentGateway?: StringFilter<"Transaction"> | string
+    licensePdfUrl?: StringFilter<"Transaction"> | string
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    track?: XOR<MasterTrackScalarRelationFilter, MasterTrackWhereInput>
   }, "id">
 
-  export type BeatOrderByWithAggregationInput = {
+  export type TransactionOrderByWithAggregationInput = {
     id?: SortOrder
-    title?: SortOrder
-    bpm?: SortOrder
-    key?: SortOrder
-    genre?: SortOrder
-    mp3Url?: SortOrder
-    wavUrl?: SortOrder
-    stemsUrl?: SortOrder
-    coverArtUrl?: SortOrder
-    priceMp3?: SortOrder
-    priceWav?: SortOrder
-    priceStems?: SortOrder
-    priceExcl?: SortOrder
+    trackId?: SortOrder
+    buyerEmail?: SortOrder
+    licenseType?: SortOrder
+    amountPaid?: SortOrder
+    paymentGateway?: SortOrder
+    licensePdfUrl?: SortOrder
     createdAt?: SortOrder
-    _count?: BeatCountOrderByAggregateInput
-    _avg?: BeatAvgOrderByAggregateInput
-    _max?: BeatMaxOrderByAggregateInput
-    _min?: BeatMinOrderByAggregateInput
-    _sum?: BeatSumOrderByAggregateInput
+    _count?: TransactionCountOrderByAggregateInput
+    _avg?: TransactionAvgOrderByAggregateInput
+    _max?: TransactionMaxOrderByAggregateInput
+    _min?: TransactionMinOrderByAggregateInput
+    _sum?: TransactionSumOrderByAggregateInput
   }
 
-  export type BeatScalarWhereWithAggregatesInput = {
-    AND?: BeatScalarWhereWithAggregatesInput | BeatScalarWhereWithAggregatesInput[]
-    OR?: BeatScalarWhereWithAggregatesInput[]
-    NOT?: BeatScalarWhereWithAggregatesInput | BeatScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Beat"> | string
-    title?: StringWithAggregatesFilter<"Beat"> | string
-    bpm?: IntWithAggregatesFilter<"Beat"> | number
-    key?: StringWithAggregatesFilter<"Beat"> | string
-    genre?: StringWithAggregatesFilter<"Beat"> | string
-    mp3Url?: StringWithAggregatesFilter<"Beat"> | string
-    wavUrl?: StringWithAggregatesFilter<"Beat"> | string
-    stemsUrl?: StringWithAggregatesFilter<"Beat"> | string
-    coverArtUrl?: StringWithAggregatesFilter<"Beat"> | string
-    priceMp3?: FloatWithAggregatesFilter<"Beat"> | number
-    priceWav?: FloatWithAggregatesFilter<"Beat"> | number
-    priceStems?: FloatWithAggregatesFilter<"Beat"> | number
-    priceExcl?: FloatWithAggregatesFilter<"Beat"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"Beat"> | Date | string
+  export type TransactionScalarWhereWithAggregatesInput = {
+    AND?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    OR?: TransactionScalarWhereWithAggregatesInput[]
+    NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Transaction"> | string
+    trackId?: StringWithAggregatesFilter<"Transaction"> | string
+    buyerEmail?: StringWithAggregatesFilter<"Transaction"> | string
+    licenseType?: StringWithAggregatesFilter<"Transaction"> | string
+    amountPaid?: FloatWithAggregatesFilter<"Transaction"> | number
+    paymentGateway?: StringWithAggregatesFilter<"Transaction"> | string
+    licensePdfUrl?: StringWithAggregatesFilter<"Transaction"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   }
 
-  export type BeatCreateInput = {
+  export type MasterTrackCreateInput = {
     id?: string
     title: string
+    slug: string
     bpm: number
-    key: string
+    musicalKey: string
     genre?: string
-    mp3Url: string
-    wavUrl: string
-    stemsUrl: string
+    subGenre?: string | null
+    moodTags?: MasterTrackCreatemoodTagsInput | string[]
+    taggedMp3Url: string
+    untaggedWavUrl: string
+    stemsZipUrl: string
     coverArtUrl: string
     priceMp3?: number
     priceWav?: number
     priceStems?: number
-    priceExcl?: number
+    priceExclusive?: number
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: number
+    downloadCount?: number
     createdAt?: Date | string
+    updatedAt?: Date | string
+    sales?: TransactionCreateNestedManyWithoutTrackInput
   }
 
-  export type BeatUncheckedCreateInput = {
+  export type MasterTrackUncheckedCreateInput = {
     id?: string
     title: string
+    slug: string
     bpm: number
-    key: string
+    musicalKey: string
     genre?: string
-    mp3Url: string
-    wavUrl: string
-    stemsUrl: string
+    subGenre?: string | null
+    moodTags?: MasterTrackCreatemoodTagsInput | string[]
+    taggedMp3Url: string
+    untaggedWavUrl: string
+    stemsZipUrl: string
     coverArtUrl: string
     priceMp3?: number
     priceWav?: number
     priceStems?: number
-    priceExcl?: number
+    priceExclusive?: number
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: number
+    downloadCount?: number
     createdAt?: Date | string
+    updatedAt?: Date | string
+    sales?: TransactionUncheckedCreateNestedManyWithoutTrackInput
   }
 
-  export type BeatUpdateInput = {
+  export type MasterTrackUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     bpm?: IntFieldUpdateOperationsInput | number
-    key?: StringFieldUpdateOperationsInput | string
+    musicalKey?: StringFieldUpdateOperationsInput | string
     genre?: StringFieldUpdateOperationsInput | string
-    mp3Url?: StringFieldUpdateOperationsInput | string
-    wavUrl?: StringFieldUpdateOperationsInput | string
-    stemsUrl?: StringFieldUpdateOperationsInput | string
+    subGenre?: NullableStringFieldUpdateOperationsInput | string | null
+    moodTags?: MasterTrackUpdatemoodTagsInput | string[]
+    taggedMp3Url?: StringFieldUpdateOperationsInput | string
+    untaggedWavUrl?: StringFieldUpdateOperationsInput | string
+    stemsZipUrl?: StringFieldUpdateOperationsInput | string
     coverArtUrl?: StringFieldUpdateOperationsInput | string
     priceMp3?: FloatFieldUpdateOperationsInput | number
     priceWav?: FloatFieldUpdateOperationsInput | number
     priceStems?: FloatFieldUpdateOperationsInput | number
-    priceExcl?: FloatFieldUpdateOperationsInput | number
+    priceExclusive?: FloatFieldUpdateOperationsInput | number
+    isExclusiveSold?: BoolFieldUpdateOperationsInput | boolean
+    isVaultLocked?: BoolFieldUpdateOperationsInput | boolean
+    playCount?: IntFieldUpdateOperationsInput | number
+    downloadCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sales?: TransactionUpdateManyWithoutTrackNestedInput
   }
 
-  export type BeatUncheckedUpdateInput = {
+  export type MasterTrackUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     bpm?: IntFieldUpdateOperationsInput | number
-    key?: StringFieldUpdateOperationsInput | string
+    musicalKey?: StringFieldUpdateOperationsInput | string
     genre?: StringFieldUpdateOperationsInput | string
-    mp3Url?: StringFieldUpdateOperationsInput | string
-    wavUrl?: StringFieldUpdateOperationsInput | string
-    stemsUrl?: StringFieldUpdateOperationsInput | string
+    subGenre?: NullableStringFieldUpdateOperationsInput | string | null
+    moodTags?: MasterTrackUpdatemoodTagsInput | string[]
+    taggedMp3Url?: StringFieldUpdateOperationsInput | string
+    untaggedWavUrl?: StringFieldUpdateOperationsInput | string
+    stemsZipUrl?: StringFieldUpdateOperationsInput | string
     coverArtUrl?: StringFieldUpdateOperationsInput | string
     priceMp3?: FloatFieldUpdateOperationsInput | number
     priceWav?: FloatFieldUpdateOperationsInput | number
     priceStems?: FloatFieldUpdateOperationsInput | number
-    priceExcl?: FloatFieldUpdateOperationsInput | number
+    priceExclusive?: FloatFieldUpdateOperationsInput | number
+    isExclusiveSold?: BoolFieldUpdateOperationsInput | boolean
+    isVaultLocked?: BoolFieldUpdateOperationsInput | boolean
+    playCount?: IntFieldUpdateOperationsInput | number
+    downloadCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sales?: TransactionUncheckedUpdateManyWithoutTrackNestedInput
   }
 
-  export type BeatCreateManyInput = {
+  export type MasterTrackCreateManyInput = {
     id?: string
     title: string
+    slug: string
     bpm: number
-    key: string
+    musicalKey: string
     genre?: string
-    mp3Url: string
-    wavUrl: string
-    stemsUrl: string
+    subGenre?: string | null
+    moodTags?: MasterTrackCreatemoodTagsInput | string[]
+    taggedMp3Url: string
+    untaggedWavUrl: string
+    stemsZipUrl: string
     coverArtUrl: string
     priceMp3?: number
     priceWav?: number
     priceStems?: number
-    priceExcl?: number
+    priceExclusive?: number
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: number
+    downloadCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MasterTrackUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    bpm?: IntFieldUpdateOperationsInput | number
+    musicalKey?: StringFieldUpdateOperationsInput | string
+    genre?: StringFieldUpdateOperationsInput | string
+    subGenre?: NullableStringFieldUpdateOperationsInput | string | null
+    moodTags?: MasterTrackUpdatemoodTagsInput | string[]
+    taggedMp3Url?: StringFieldUpdateOperationsInput | string
+    untaggedWavUrl?: StringFieldUpdateOperationsInput | string
+    stemsZipUrl?: StringFieldUpdateOperationsInput | string
+    coverArtUrl?: StringFieldUpdateOperationsInput | string
+    priceMp3?: FloatFieldUpdateOperationsInput | number
+    priceWav?: FloatFieldUpdateOperationsInput | number
+    priceStems?: FloatFieldUpdateOperationsInput | number
+    priceExclusive?: FloatFieldUpdateOperationsInput | number
+    isExclusiveSold?: BoolFieldUpdateOperationsInput | boolean
+    isVaultLocked?: BoolFieldUpdateOperationsInput | boolean
+    playCount?: IntFieldUpdateOperationsInput | number
+    downloadCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MasterTrackUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    bpm?: IntFieldUpdateOperationsInput | number
+    musicalKey?: StringFieldUpdateOperationsInput | string
+    genre?: StringFieldUpdateOperationsInput | string
+    subGenre?: NullableStringFieldUpdateOperationsInput | string | null
+    moodTags?: MasterTrackUpdatemoodTagsInput | string[]
+    taggedMp3Url?: StringFieldUpdateOperationsInput | string
+    untaggedWavUrl?: StringFieldUpdateOperationsInput | string
+    stemsZipUrl?: StringFieldUpdateOperationsInput | string
+    coverArtUrl?: StringFieldUpdateOperationsInput | string
+    priceMp3?: FloatFieldUpdateOperationsInput | number
+    priceWav?: FloatFieldUpdateOperationsInput | number
+    priceStems?: FloatFieldUpdateOperationsInput | number
+    priceExclusive?: FloatFieldUpdateOperationsInput | number
+    isExclusiveSold?: BoolFieldUpdateOperationsInput | boolean
+    isVaultLocked?: BoolFieldUpdateOperationsInput | boolean
+    playCount?: IntFieldUpdateOperationsInput | number
+    downloadCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateInput = {
+    id?: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
+    createdAt?: Date | string
+    track: MasterTrackCreateNestedOneWithoutSalesInput
+  }
+
+  export type TransactionUncheckedCreateInput = {
+    id?: string
+    trackId: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
     createdAt?: Date | string
   }
 
-  export type BeatUpdateManyMutationInput = {
+  export type TransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    bpm?: IntFieldUpdateOperationsInput | number
-    key?: StringFieldUpdateOperationsInput | string
-    genre?: StringFieldUpdateOperationsInput | string
-    mp3Url?: StringFieldUpdateOperationsInput | string
-    wavUrl?: StringFieldUpdateOperationsInput | string
-    stemsUrl?: StringFieldUpdateOperationsInput | string
-    coverArtUrl?: StringFieldUpdateOperationsInput | string
-    priceMp3?: FloatFieldUpdateOperationsInput | number
-    priceWav?: FloatFieldUpdateOperationsInput | number
-    priceStems?: FloatFieldUpdateOperationsInput | number
-    priceExcl?: FloatFieldUpdateOperationsInput | number
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    track?: MasterTrackUpdateOneRequiredWithoutSalesNestedInput
+  }
+
+  export type TransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    trackId?: StringFieldUpdateOperationsInput | string
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BeatUncheckedUpdateManyInput = {
+  export type TransactionCreateManyInput = {
+    id?: string
+    trackId: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
+    createdAt?: Date | string
+  }
+
+  export type TransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    bpm?: IntFieldUpdateOperationsInput | number
-    key?: StringFieldUpdateOperationsInput | string
-    genre?: StringFieldUpdateOperationsInput | string
-    mp3Url?: StringFieldUpdateOperationsInput | string
-    wavUrl?: StringFieldUpdateOperationsInput | string
-    stemsUrl?: StringFieldUpdateOperationsInput | string
-    coverArtUrl?: StringFieldUpdateOperationsInput | string
-    priceMp3?: FloatFieldUpdateOperationsInput | number
-    priceWav?: FloatFieldUpdateOperationsInput | number
-    priceStems?: FloatFieldUpdateOperationsInput | number
-    priceExcl?: FloatFieldUpdateOperationsInput | number
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    trackId?: StringFieldUpdateOperationsInput | string
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2419,6 +4147,29 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -2428,6 +4179,11 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -2441,71 +4197,112 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type BeatCountOrderByAggregateInput = {
+  export type TransactionListRelationFilter = {
+    every?: TransactionWhereInput
+    some?: TransactionWhereInput
+    none?: TransactionWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type TransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MasterTrackCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     bpm?: SortOrder
-    key?: SortOrder
+    musicalKey?: SortOrder
     genre?: SortOrder
-    mp3Url?: SortOrder
-    wavUrl?: SortOrder
-    stemsUrl?: SortOrder
+    subGenre?: SortOrder
+    moodTags?: SortOrder
+    taggedMp3Url?: SortOrder
+    untaggedWavUrl?: SortOrder
+    stemsZipUrl?: SortOrder
     coverArtUrl?: SortOrder
     priceMp3?: SortOrder
     priceWav?: SortOrder
     priceStems?: SortOrder
-    priceExcl?: SortOrder
+    priceExclusive?: SortOrder
+    isExclusiveSold?: SortOrder
+    isVaultLocked?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type BeatAvgOrderByAggregateInput = {
+  export type MasterTrackAvgOrderByAggregateInput = {
     bpm?: SortOrder
     priceMp3?: SortOrder
     priceWav?: SortOrder
     priceStems?: SortOrder
-    priceExcl?: SortOrder
+    priceExclusive?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
   }
 
-  export type BeatMaxOrderByAggregateInput = {
+  export type MasterTrackMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     bpm?: SortOrder
-    key?: SortOrder
+    musicalKey?: SortOrder
     genre?: SortOrder
-    mp3Url?: SortOrder
-    wavUrl?: SortOrder
-    stemsUrl?: SortOrder
+    subGenre?: SortOrder
+    taggedMp3Url?: SortOrder
+    untaggedWavUrl?: SortOrder
+    stemsZipUrl?: SortOrder
     coverArtUrl?: SortOrder
     priceMp3?: SortOrder
     priceWav?: SortOrder
     priceStems?: SortOrder
-    priceExcl?: SortOrder
+    priceExclusive?: SortOrder
+    isExclusiveSold?: SortOrder
+    isVaultLocked?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type BeatMinOrderByAggregateInput = {
+  export type MasterTrackMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     bpm?: SortOrder
-    key?: SortOrder
+    musicalKey?: SortOrder
     genre?: SortOrder
-    mp3Url?: SortOrder
-    wavUrl?: SortOrder
-    stemsUrl?: SortOrder
+    subGenre?: SortOrder
+    taggedMp3Url?: SortOrder
+    untaggedWavUrl?: SortOrder
+    stemsZipUrl?: SortOrder
     coverArtUrl?: SortOrder
     priceMp3?: SortOrder
     priceWav?: SortOrder
     priceStems?: SortOrder
-    priceExcl?: SortOrder
+    priceExclusive?: SortOrder
+    isExclusiveSold?: SortOrder
+    isVaultLocked?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type BeatSumOrderByAggregateInput = {
+  export type MasterTrackSumOrderByAggregateInput = {
     bpm?: SortOrder
     priceMp3?: SortOrder
     priceWav?: SortOrder
     priceStems?: SortOrder
-    priceExcl?: SortOrder
+    priceExclusive?: SortOrder
+    playCount?: SortOrder
+    downloadCount?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -2542,6 +4339,24 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -2558,6 +4373,14 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -2572,6 +4395,70 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type MasterTrackScalarRelationFilter = {
+    is?: MasterTrackWhereInput
+    isNot?: MasterTrackWhereInput
+  }
+
+  export type TransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    trackId?: SortOrder
+    buyerEmail?: SortOrder
+    licenseType?: SortOrder
+    amountPaid?: SortOrder
+    paymentGateway?: SortOrder
+    licensePdfUrl?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TransactionAvgOrderByAggregateInput = {
+    amountPaid?: SortOrder
+  }
+
+  export type TransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    trackId?: SortOrder
+    buyerEmail?: SortOrder
+    licenseType?: SortOrder
+    amountPaid?: SortOrder
+    paymentGateway?: SortOrder
+    licensePdfUrl?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    trackId?: SortOrder
+    buyerEmail?: SortOrder
+    licenseType?: SortOrder
+    amountPaid?: SortOrder
+    paymentGateway?: SortOrder
+    licensePdfUrl?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TransactionSumOrderByAggregateInput = {
+    amountPaid?: SortOrder
+  }
+
+  export type MasterTrackCreatemoodTagsInput = {
+    set: string[]
+  }
+
+  export type TransactionCreateNestedManyWithoutTrackInput = {
+    create?: XOR<TransactionCreateWithoutTrackInput, TransactionUncheckedCreateWithoutTrackInput> | TransactionCreateWithoutTrackInput[] | TransactionUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutTrackInput | TransactionCreateOrConnectWithoutTrackInput[]
+    createMany?: TransactionCreateManyTrackInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type TransactionUncheckedCreateNestedManyWithoutTrackInput = {
+    create?: XOR<TransactionCreateWithoutTrackInput, TransactionUncheckedCreateWithoutTrackInput> | TransactionCreateWithoutTrackInput[] | TransactionUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutTrackInput | TransactionCreateOrConnectWithoutTrackInput[]
+    createMany?: TransactionCreateManyTrackInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2584,6 +4471,15 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type MasterTrackUpdatemoodTagsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -2592,8 +4488,54 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type TransactionUpdateManyWithoutTrackNestedInput = {
+    create?: XOR<TransactionCreateWithoutTrackInput, TransactionUncheckedCreateWithoutTrackInput> | TransactionCreateWithoutTrackInput[] | TransactionUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutTrackInput | TransactionCreateOrConnectWithoutTrackInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutTrackInput | TransactionUpsertWithWhereUniqueWithoutTrackInput[]
+    createMany?: TransactionCreateManyTrackInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutTrackInput | TransactionUpdateWithWhereUniqueWithoutTrackInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutTrackInput | TransactionUpdateManyWithWhereWithoutTrackInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutTrackNestedInput = {
+    create?: XOR<TransactionCreateWithoutTrackInput, TransactionUncheckedCreateWithoutTrackInput> | TransactionCreateWithoutTrackInput[] | TransactionUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutTrackInput | TransactionCreateOrConnectWithoutTrackInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutTrackInput | TransactionUpsertWithWhereUniqueWithoutTrackInput[]
+    createMany?: TransactionCreateManyTrackInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutTrackInput | TransactionUpdateWithWhereUniqueWithoutTrackInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutTrackInput | TransactionUpdateManyWithWhereWithoutTrackInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type MasterTrackCreateNestedOneWithoutSalesInput = {
+    create?: XOR<MasterTrackCreateWithoutSalesInput, MasterTrackUncheckedCreateWithoutSalesInput>
+    connectOrCreate?: MasterTrackCreateOrConnectWithoutSalesInput
+    connect?: MasterTrackWhereUniqueInput
+  }
+
+  export type MasterTrackUpdateOneRequiredWithoutSalesNestedInput = {
+    create?: XOR<MasterTrackCreateWithoutSalesInput, MasterTrackUncheckedCreateWithoutSalesInput>
+    connectOrCreate?: MasterTrackCreateOrConnectWithoutSalesInput
+    upsert?: MasterTrackUpsertWithoutSalesInput
+    connect?: MasterTrackWhereUniqueInput
+    update?: XOR<XOR<MasterTrackUpdateToOneWithWhereWithoutSalesInput, MasterTrackUpdateWithoutSalesInput>, MasterTrackUncheckedUpdateWithoutSalesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2621,6 +4563,20 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -2630,6 +4586,11 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -2676,6 +4637,34 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -2692,6 +4681,14 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -2704,6 +4701,222 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type TransactionCreateWithoutTrackInput = {
+    id?: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
+    createdAt?: Date | string
+  }
+
+  export type TransactionUncheckedCreateWithoutTrackInput = {
+    id?: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
+    createdAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutTrackInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutTrackInput, TransactionUncheckedCreateWithoutTrackInput>
+  }
+
+  export type TransactionCreateManyTrackInputEnvelope = {
+    data: TransactionCreateManyTrackInput | TransactionCreateManyTrackInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutTrackInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutTrackInput, TransactionUncheckedUpdateWithoutTrackInput>
+    create: XOR<TransactionCreateWithoutTrackInput, TransactionUncheckedCreateWithoutTrackInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutTrackInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutTrackInput, TransactionUncheckedUpdateWithoutTrackInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutTrackInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutTrackInput>
+  }
+
+  export type TransactionScalarWhereInput = {
+    AND?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    OR?: TransactionScalarWhereInput[]
+    NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    trackId?: StringFilter<"Transaction"> | string
+    buyerEmail?: StringFilter<"Transaction"> | string
+    licenseType?: StringFilter<"Transaction"> | string
+    amountPaid?: FloatFilter<"Transaction"> | number
+    paymentGateway?: StringFilter<"Transaction"> | string
+    licensePdfUrl?: StringFilter<"Transaction"> | string
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+  }
+
+  export type MasterTrackCreateWithoutSalesInput = {
+    id?: string
+    title: string
+    slug: string
+    bpm: number
+    musicalKey: string
+    genre?: string
+    subGenre?: string | null
+    moodTags?: MasterTrackCreatemoodTagsInput | string[]
+    taggedMp3Url: string
+    untaggedWavUrl: string
+    stemsZipUrl: string
+    coverArtUrl: string
+    priceMp3?: number
+    priceWav?: number
+    priceStems?: number
+    priceExclusive?: number
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: number
+    downloadCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MasterTrackUncheckedCreateWithoutSalesInput = {
+    id?: string
+    title: string
+    slug: string
+    bpm: number
+    musicalKey: string
+    genre?: string
+    subGenre?: string | null
+    moodTags?: MasterTrackCreatemoodTagsInput | string[]
+    taggedMp3Url: string
+    untaggedWavUrl: string
+    stemsZipUrl: string
+    coverArtUrl: string
+    priceMp3?: number
+    priceWav?: number
+    priceStems?: number
+    priceExclusive?: number
+    isExclusiveSold?: boolean
+    isVaultLocked?: boolean
+    playCount?: number
+    downloadCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MasterTrackCreateOrConnectWithoutSalesInput = {
+    where: MasterTrackWhereUniqueInput
+    create: XOR<MasterTrackCreateWithoutSalesInput, MasterTrackUncheckedCreateWithoutSalesInput>
+  }
+
+  export type MasterTrackUpsertWithoutSalesInput = {
+    update: XOR<MasterTrackUpdateWithoutSalesInput, MasterTrackUncheckedUpdateWithoutSalesInput>
+    create: XOR<MasterTrackCreateWithoutSalesInput, MasterTrackUncheckedCreateWithoutSalesInput>
+    where?: MasterTrackWhereInput
+  }
+
+  export type MasterTrackUpdateToOneWithWhereWithoutSalesInput = {
+    where?: MasterTrackWhereInput
+    data: XOR<MasterTrackUpdateWithoutSalesInput, MasterTrackUncheckedUpdateWithoutSalesInput>
+  }
+
+  export type MasterTrackUpdateWithoutSalesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    bpm?: IntFieldUpdateOperationsInput | number
+    musicalKey?: StringFieldUpdateOperationsInput | string
+    genre?: StringFieldUpdateOperationsInput | string
+    subGenre?: NullableStringFieldUpdateOperationsInput | string | null
+    moodTags?: MasterTrackUpdatemoodTagsInput | string[]
+    taggedMp3Url?: StringFieldUpdateOperationsInput | string
+    untaggedWavUrl?: StringFieldUpdateOperationsInput | string
+    stemsZipUrl?: StringFieldUpdateOperationsInput | string
+    coverArtUrl?: StringFieldUpdateOperationsInput | string
+    priceMp3?: FloatFieldUpdateOperationsInput | number
+    priceWav?: FloatFieldUpdateOperationsInput | number
+    priceStems?: FloatFieldUpdateOperationsInput | number
+    priceExclusive?: FloatFieldUpdateOperationsInput | number
+    isExclusiveSold?: BoolFieldUpdateOperationsInput | boolean
+    isVaultLocked?: BoolFieldUpdateOperationsInput | boolean
+    playCount?: IntFieldUpdateOperationsInput | number
+    downloadCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MasterTrackUncheckedUpdateWithoutSalesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    bpm?: IntFieldUpdateOperationsInput | number
+    musicalKey?: StringFieldUpdateOperationsInput | string
+    genre?: StringFieldUpdateOperationsInput | string
+    subGenre?: NullableStringFieldUpdateOperationsInput | string | null
+    moodTags?: MasterTrackUpdatemoodTagsInput | string[]
+    taggedMp3Url?: StringFieldUpdateOperationsInput | string
+    untaggedWavUrl?: StringFieldUpdateOperationsInput | string
+    stemsZipUrl?: StringFieldUpdateOperationsInput | string
+    coverArtUrl?: StringFieldUpdateOperationsInput | string
+    priceMp3?: FloatFieldUpdateOperationsInput | number
+    priceWav?: FloatFieldUpdateOperationsInput | number
+    priceStems?: FloatFieldUpdateOperationsInput | number
+    priceExclusive?: FloatFieldUpdateOperationsInput | number
+    isExclusiveSold?: BoolFieldUpdateOperationsInput | boolean
+    isVaultLocked?: BoolFieldUpdateOperationsInput | boolean
+    playCount?: IntFieldUpdateOperationsInput | number
+    downloadCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateManyTrackInput = {
+    id?: string
+    buyerEmail: string
+    licenseType: string
+    amountPaid: number
+    paymentGateway: string
+    licensePdfUrl: string
+    createdAt?: Date | string
+  }
+
+  export type TransactionUpdateWithoutTrackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateWithoutTrackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutTrackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    buyerEmail?: StringFieldUpdateOperationsInput | string
+    licenseType?: StringFieldUpdateOperationsInput | string
+    amountPaid?: FloatFieldUpdateOperationsInput | number
+    paymentGateway?: StringFieldUpdateOperationsInput | string
+    licensePdfUrl?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

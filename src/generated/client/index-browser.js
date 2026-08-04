@@ -120,20 +120,39 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.BeatScalarFieldEnum = {
+exports.Prisma.MasterTrackScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  slug: 'slug',
   bpm: 'bpm',
-  key: 'key',
+  musicalKey: 'musicalKey',
   genre: 'genre',
-  mp3Url: 'mp3Url',
-  wavUrl: 'wavUrl',
-  stemsUrl: 'stemsUrl',
+  subGenre: 'subGenre',
+  moodTags: 'moodTags',
+  taggedMp3Url: 'taggedMp3Url',
+  untaggedWavUrl: 'untaggedWavUrl',
+  stemsZipUrl: 'stemsZipUrl',
   coverArtUrl: 'coverArtUrl',
   priceMp3: 'priceMp3',
   priceWav: 'priceWav',
   priceStems: 'priceStems',
-  priceExcl: 'priceExcl',
+  priceExclusive: 'priceExclusive',
+  isExclusiveSold: 'isExclusiveSold',
+  isVaultLocked: 'isVaultLocked',
+  playCount: 'playCount',
+  downloadCount: 'downloadCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  trackId: 'trackId',
+  buyerEmail: 'buyerEmail',
+  licenseType: 'licenseType',
+  amountPaid: 'amountPaid',
+  paymentGateway: 'paymentGateway',
+  licensePdfUrl: 'licensePdfUrl',
   createdAt: 'createdAt'
 };
 
@@ -147,9 +166,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 
 exports.Prisma.ModelName = {
-  Beat: 'Beat'
+  MasterTrack: 'MasterTrack',
+  Transaction: 'Transaction'
 };
 
 /**

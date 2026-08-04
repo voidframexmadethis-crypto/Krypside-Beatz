@@ -63,20 +63,21 @@ async function startServer() {
       } = req.body;
 
       // Register track directly into your private database catalog
-      const newBeat = await prisma.beat.create({
+      const newBeat = await prisma.masterTrack.create({
         data: {
           title,
           bpm: Number(bpm),
-          key,
+          slug: title.toLowerCase().replace(/\s+/g, '-'),
+          musicalKey: key,
           genre: "Trap",
-          mp3Url,
-          wavUrl,
-          stemsUrl,
-          coverArtUrl,
+          taggedMp3Url: mp3Url,
+          untaggedWavUrl: wavUrl,
+          stemsZipUrl: stemsUrl,
+          coverArtUrl: coverArtUrl,
           priceMp3: Number(priceMp3),
           priceWav: Number(priceWav),
           priceStems: Number(priceStems),
-          priceExcl: Number(priceExcl)
+          priceExclusive: Number(priceExcl)
         }
       });
 
@@ -116,7 +117,7 @@ async function startServer() {
   // Public Catalog Stream Endpoint (For artists browsing your site)
   app.get('/api/beats', async (req, res) => {
     try {
-      const beats = await prisma.beat.findMany({
+      const beats = await prisma.masterTrack.findMany({
         orderBy: { createdAt: 'desc' }
       });
       res.json(beats);

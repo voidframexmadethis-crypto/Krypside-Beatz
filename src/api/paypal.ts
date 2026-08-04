@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { PrismaClient } from '../generated/client/client.js';
+import { PrismaClient } from '../generated/client/index.js';
 
 // Your Personal PayPal Verified Endpoint
 const PERSONAL_PAYPAL_EMAIL = process.env.PERSONAL_PAYPAL_EMAIL;
