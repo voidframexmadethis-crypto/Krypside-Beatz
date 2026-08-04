@@ -125,6 +125,46 @@ async function startServer() {
     }
   });
 
+  app.get('/stream/:beatId', (req, res) => {
+      // Path to your local or external audio file storage
+      const audioPath = path.resolve(`./audio-vault/${req.params.beatId}.mp3`);
+      
+      if (!fs.existsSync(audioPath)) {
+          return res.status(404).send('Beat not found');
+      }
+
+      const stat = fs.statSync(audioPath);
+      const fileSize = stat.size;
+      const range = req.headers.range;
+
+      if (range) {
+          // Parse range header for chunked streaming
+          const parts = range.replace(/bytes=/, "").split("-");
+          const start = parseInt(parts[0], 10);
+          const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+          const chunksize = (end - start) + 1;
+          const file = fs.createReadStream(audioPath, { start, end });
+          
+          const head = {
+              'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+              'Accept-Ranges': 'bytes',
+              'Content-Length': chunksize,
+              'Content-Type': 'audio/mpeg',
+          };
+          
+          res.writeHead(206, head);
+          file.pipe(res);
+      } else {
+          const head = {
+              'Content-Length': fileSize,
+              'Content-Type': 'audio/mpeg',
+          };
+          
+          res.writeHead(200, head);
+          fs.createReadStream(audioPath).pipe(res);
+      }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
