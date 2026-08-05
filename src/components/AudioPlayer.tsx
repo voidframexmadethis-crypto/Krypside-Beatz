@@ -230,9 +230,12 @@ export default function AudioPlayer() {
             <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
               <div className="flex items-center gap-3">
                 <img 
-                  src={currentTrack.coverArtUrl || 'https://via.placeholder.com/150?text=Cover'} 
+                  src={currentTrack.coverArtUrl || (currentTrack as any).artworkUrl || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80'} 
                   alt={currentTrack.title}
-                  className="w-14 h-14 rounded-lg object-cover border border-neutral-800 shadow-md"
+                  className="w-14 h-14 rounded-lg object-cover border border-neutral-800 shadow-md beat-cover-art"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80';
+                  }}
                 />
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -353,9 +356,12 @@ export default function AudioPlayer() {
           <div className="flex items-center gap-3 min-w-0 max-w-[32%] sm:max-w-[35%]">
             <div className="relative w-11 h-11 md:w-12 md:h-12 rounded-lg overflow-hidden bg-neutral-900 shrink-0 border border-neutral-800 group">
               <img 
-                src={currentTrack.coverArtUrl || 'https://via.placeholder.com/150?text=Beat'} 
+                src={currentTrack.coverArtUrl || (currentTrack as any).artworkUrl || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80'} 
                 alt={currentTrack.title} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover beat-cover-art"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80';
+                }}
               />
               {currentTrack.flashSaleEnabled && !isTimerExpired && (
                 <div className="absolute top-0 right-0 bg-red-600 text-[8px] font-black px-1 text-white rounded-bl shadow">

@@ -40,7 +40,14 @@ export default function CatalogGrid() {
         <div id="catalogGrid" className="catalog-grid">
             {Array.isArray(tracks) && tracks.map((track) => (
                 <div key={track.id} className="beat-card bg-[#0e0e10] border border-[#1c1c1f] rounded-lg p-4" data-audio-url={track.taggedMp3Url}>
-                    <img src={track.coverArtUrl || ''} alt={track.title} className="w-full h-40 object-cover rounded mb-4" />
+                    <img 
+                      src={track.coverArtUrl || (track as any).artworkUrl || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80'} 
+                      alt={track.title} 
+                      className="beat-cover-art w-full h-40 object-cover rounded mb-4" 
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80';
+                      }}
+                    />
                     <div className="beat-title text-lg font-bold mb-1 text-white">{track.title}</div>
                     <div className="beat-meta text-sm text-neutral-400 mb-4">
                         <span>{track.bpm || '140'} BPM</span> • <span>Key: {track.musicalKey || 'C Min'}</span>
