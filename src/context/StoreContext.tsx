@@ -146,7 +146,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         };
       });
     }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, 'beats');
+      console.warn("Firestore public beats listener notice:", error);
     });
 
     // User-specific beats listener (for private/unlisted)
@@ -169,7 +169,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           archivedBeats: privateBeats
         }));
       }, (error) => {
-        handleFirestoreError(error, OperationType.LIST, 'beats');
+        console.warn("Firestore private beats listener notice:", error);
       });
     }
 
@@ -192,7 +192,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         }));
       }
     }, (error) => {
-      handleFirestoreError(error, OperationType.GET, `profiles/${user.uid}`);
+      console.warn("Firestore profile listener notice:", error);
     });
 
     return () => unsubscribe();

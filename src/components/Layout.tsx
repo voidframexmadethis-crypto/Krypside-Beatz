@@ -130,10 +130,27 @@ export default function Layout() {
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const profileName = user?.displayName || state.profile.name || "KRYPSIDE";
-  const profileBio =
-    state.profile.bio || "Pro Audio Loops & Instrumental Beats";
-  const profileImg = user?.photoURL || state.profile.avatarUrl || "";
+  const [profileOverride, setProfileOverride] = useState({
+    name: typeof window !== 'undefined' ? (localStorage.getItem('KRYPSIDE_DISPLAY_NAME') || '') : '',
+    bio: typeof window !== 'undefined' ? (localStorage.getItem('KRYPSIDE_BIO') || '') : '',
+    img: typeof window !== 'undefined' ? (localStorage.getItem('KRYPSIDE_IMAGE_URL') || '') : '',
+  });
+
+  useEffect(() => {
+    const syncProfile = () => {
+      setProfileOverride({
+        name: localStorage.getItem('KRYPSIDE_DISPLAY_NAME') || '',
+        bio: localStorage.getItem('KRYPSIDE_BIO') || '',
+        img: localStorage.getItem('KRYPSIDE_IMAGE_URL') || '',
+      });
+    };
+    window.addEventListener('KRYPSIDE_PROFILE_UPDATE', syncProfile);
+    return () => window.removeEventListener('KRYPSIDE_PROFILE_UPDATE', syncProfile);
+  }, []);
+
+  const profileName = profileOverride.name || user?.displayName || state.profile.name || "KRYPSIDE";
+  const profileBio = profileOverride.bio || state.profile.bio || "Pro Audio Loops & Instrumental Beats";
+  const profileImg = profileOverride.img || user?.photoURL || state.profile.avatarUrl || "";
   const [socials, setSocials] = useState({ fb: "", ig: "", yt: "", tw: "" });
 
   const handleAdminAccess = () => {

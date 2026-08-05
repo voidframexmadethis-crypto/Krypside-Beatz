@@ -1,4 +1,5 @@
 import { beatVault } from './infiniteBeatStorage';
+import { krypsideVault } from './krypsideStorageEngine';
 
 // Upload your beat straight from your website form input using Puter cloud storage or Audio Cloud backend
 export async function uploadBeat(file: File): Promise<string> {
@@ -212,6 +213,11 @@ export class LightningUploader {
 
         console.log(`>> [Success]: Beat locked into catalog buffer in ${duration} seconds.`);
         beatVault.storeBeatLocally(beatPayload);
+        try {
+            await krypsideVault.storeAsset(file, file.type.startsWith('image') ? 'artwork' : 'audio', { title: file.name });
+        } catch (e) {
+            console.warn("Vault asset storage notice:", e);
+        }
         if (this.onComplete) this.onComplete(beatPayload);
     }
 }

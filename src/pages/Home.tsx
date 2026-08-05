@@ -11,13 +11,16 @@ import {
   Globe, 
   CheckCircle2, 
   ArrowRight,
-  Disc
+  Disc,
+  Upload,
+  Image as ImageIcon,
+  Camera,
+  Trash2
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import CatalogGrid from '../components/CatalogGrid';
 
 export default function Home() {
-  const { incrementAnalytics } = useStore();
+  const { state, updateProfile, incrementAnalytics } = useStore();
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [bookingStep, setBookingStep] = useState(1);
   const [userAvailableTokens, setUserAvailableTokens] = useState(1);
@@ -28,6 +31,7 @@ export default function Home() {
   const [displayName, setDisplayName] = useState('KRYPSIDE');
   const [bioDescription, setBioDescription] = useState('Pro Audio Loops & Instrumental Beats');
   const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [bannerImageUrl, setBannerImageUrl] = useState('');
   const [facebookLink, setFacebookLink] = useState('');
   const [instagramLink, setInstagramLink] = useState('');
   const [youtubeLink, setYoutubeLink] = useState('');
@@ -73,6 +77,7 @@ export default function Home() {
     const savedName = localStorage.getItem('KRYPSIDE_DISPLAY_NAME');
     const savedBio = localStorage.getItem('KRYPSIDE_BIO');
     const savedImg = localStorage.getItem('KRYPSIDE_IMAGE_URL');
+    const savedBanner = localStorage.getItem('KRYPSIDE_BANNER_URL');
     const savedFacebook = localStorage.getItem('KRYPSIDE_FACEBOOK');
     const savedInstagram = localStorage.getItem('KRYPSIDE_INSTAGRAM');
     const savedYoutube = localStorage.getItem('KRYPSIDE_YOUTUBE');
@@ -80,14 +85,58 @@ export default function Home() {
     const savedPaypal = localStorage.getItem('KRYPSIDE_PERSONAL_PAYPAL');
     
     if (savedName) setDisplayName(savedName);
+    else if (state.profile.name) setDisplayName(state.profile.name);
+
     if (savedBio) setBioDescription(savedBio);
+    else if (state.profile.bio) setBioDescription(state.profile.bio);
+
     if (savedImg) setProfileImageUrl(savedImg);
+    else if (state.profile.avatarUrl) setProfileImageUrl(state.profile.avatarUrl);
+
+    if (savedBanner) setBannerImageUrl(savedBanner);
+    else if (state.profile.bannerUrl) setBannerImageUrl(state.profile.bannerUrl);
+
     if (savedFacebook) setFacebookLink(savedFacebook);
     if (savedInstagram) setInstagramLink(savedInstagram);
     if (savedYoutube) setYoutubeLink(savedYoutube);
     if (savedTwitter) setTwitterLink(savedTwitter);
     if (savedPaypal) setPaypalEmail(savedPaypal);
-  }, []);
+    else if (state.profile.paypalEmail) setPaypalEmail(state.profile.paypalEmail);
+  }, [state.profile]);
+
+  const handleProfilePictureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert("Please select a valid image file.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        setProfileImageUrl(result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert("Please select a valid image file.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        setBannerImageUrl(result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   // 🔒 THE DIRECT MERCHANT ROUTING VALVE
   // Locks your personal profile & social media links straight into storage
@@ -96,12 +145,21 @@ export default function Home() {
     localStorage.setItem('KRYPSIDE_DISPLAY_NAME', displayName);
     localStorage.setItem('KRYPSIDE_BIO', bioDescription);
     localStorage.setItem('KRYPSIDE_IMAGE_URL', profileImageUrl);
+    localStorage.setItem('KRYPSIDE_BANNER_URL', bannerImageUrl);
     localStorage.setItem('KRYPSIDE_FACEBOOK', facebookLink.trim());
     localStorage.setItem('KRYPSIDE_INSTAGRAM', instagramLink.trim());
     localStorage.setItem('KRYPSIDE_YOUTUBE', youtubeLink.trim());
     localStorage.setItem('KRYPSIDE_TWITTER', twitterLink.trim());
     localStorage.setItem('KRYPSIDE_PERSONAL_PAYPAL', paypalEmail.trim());
     
+    await updateProfile({
+      name: displayName,
+      bio: bioDescription,
+      avatarUrl: profileImageUrl,
+      bannerUrl: bannerImageUrl,
+      paypalEmail: paypalEmail.trim()
+    });
+
     setIsSaved(true);
     
     // 📡 Trigger Realtime UI Update Signal across Layout Sidebar
@@ -175,9 +233,21 @@ export default function Home() {
           <div style={{ background: '#0e0e10', border: '1px solid #1c1c1f', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
             
             {/* Artistic Header Banner */}
-            <div style={{ height: '180px', background: 'linear-gradient(135deg, #4338ca 0%, #1e1b4b 50%, #000 100%)', position: 'relative' }}>
-              <div style={{ position: 'absolute', bottom: '-45px', left: '40px', display: 'flex', alignItems: 'flex-end', gap: '20px' }}>
-                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: '#1c1c1f', border: '4px solid #0e0e10', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 20px rgba(0,0,0,0.3)' }}>
+            <div 
+              style={{ 
+                height: '200px', 
+                background: bannerImageUrl 
+                  ? `url(${bannerImageUrl}) center/cover no-repeat` 
+                  : 'linear-gradient(135deg, #4338ca 0%, #1e1b4b 50%, #000 100%)', 
+                position: 'relative',
+                borderRadius: '12px 12px 0 0',
+                overflow: 'hidden'
+              }}
+            >
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(14,14,16,0.85) 0%, rgba(0,0,0,0.2) 100%)' }} />
+              
+              <div style={{ position: 'absolute', bottom: '-45px', left: '40px', display: 'flex', alignItems: 'flex-end', gap: '20px', zIndex: 2 }}>
+                <div style={{ width: '110px', height: '110px', borderRadius: '50%', background: '#1c1c1f', border: '4px solid #0e0e10', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 25px rgba(0,0,0,0.5)' }}>
                   {profileImageUrl ? (
                     <img src={profileImageUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" />
                   ) : (
@@ -323,14 +393,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* LIVE BEAT CATALOG */}
-              <div style={{ borderTop: '1px solid #1c1c1f', paddingTop: '30px', marginBottom: '40px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Disc size={18} style={{ color: '#6366f1' }} />
-                  Live Beat Catalog
-                </h3>
-                <CatalogGrid />
-              </div>
+
 
               {/* PayPal Secure Booking Section */}
               <div style={{ borderTop: '1px solid #1c1c1f', paddingTop: '30px' }}>
@@ -647,28 +710,88 @@ export default function Home() {
 
             </div>
 
-            {/* RIGHT COLUMN: ARTWORK / SAVE ACTIONS */}
+            {/* RIGHT COLUMN: BANNER & PROFILE PICTURE & ACTIONS */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               
-              {/* Profile Image card */}
-              <div style={{ background: '#0e0e10', border: '1px solid #1c1c1f', borderRadius: '8px', padding: '25px', textAlign: 'center' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 'bold', margin: '0 0 15px 0', textAlign: 'left' }}>Profile Image</h3>
+              {/* Profile Banner Card */}
+              <div style={{ background: '#0e0e10', border: '1px solid #1c1c1f', borderRadius: '8px', padding: '20px' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 'bold', margin: '0 0 15px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ImageIcon size={16} style={{ color: '#818cf8' }} /> Profile Banner
+                </h3>
                 
-                <div style={{ width: '110px', height: '110px', borderRadius: '50%', border: '2px dashed #2d2d30', margin: '0 auto 15px auto', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#060607' }}>
+                {/* Banner Preview */}
+                <div style={{ width: '100%', height: '120px', borderRadius: '6px', border: '1px dashed #2d2d30', marginBottom: '15px', overflow: 'hidden', background: bannerImageUrl ? `url("${bannerImageUrl}") center/cover no-repeat` : 'linear-gradient(135deg, #1e1b4b 0%, #09090b 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                  {!bannerImageUrl && (
+                    <span style={{ color: '#727278', fontSize: '12px', fontWeight: 'bold' }}>Default Theme Banner</span>
+                  )}
+                  {bannerImageUrl && (
+                    <button 
+                      type="button" 
+                      onClick={() => setBannerImageUrl('')}
+                      style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.85)', border: '1px solid #3f3f46', color: '#ff4a4a', padding: '6px', borderRadius: '4px', cursor: 'pointer' }}
+                      title="Remove Banner"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+
+                {/* File Upload Button for Banner */}
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', padding: '10px', background: '#1c1c1f', border: '1px solid #2d2d30', borderRadius: '6px', color: '#a1a1aa', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', marginBottom: '10px', boxSizing: 'border-box' }}>
+                  <Upload size={14} style={{ color: '#818cf8' }} />
+                  <span>Upload Banner Image</span>
+                  <input type="file" accept="image/*" onChange={handleBannerUpload} style={{ display: 'none' }} />
+                </label>
+                
+                <label style={{ display: 'block', fontSize: '10px', color: '#727278', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '4px' }}>Or Banner Image URL</label>
+                <input 
+                  type="text" 
+                  placeholder="https://example.com/banner.jpg" 
+                  value={bannerImageUrl} 
+                  onChange={(e) => setBannerImageUrl(e.target.value)} 
+                  style={{ width: '100%', background: '#060607', border: '1px solid #1c1c1f', padding: '10px', borderRadius: '6px', color: '#fff', fontSize: '12px', boxSizing: 'border-box' }} 
+                />
+              </div>
+
+              {/* Profile Picture Card */}
+              <div style={{ background: '#0e0e10', border: '1px solid #1c1c1f', borderRadius: '8px', padding: '20px', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 'bold', margin: '0 0 15px 0', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Camera size={16} style={{ color: '#818cf8' }} /> Profile Picture
+                </h3>
+                
+                <div style={{ width: '100px', height: '100px', borderRadius: '50%', border: '2px dashed #2d2d30', margin: '0 auto 15px auto', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#060607', position: 'relative' }}>
                   {profileImageUrl ? (
                     <img src={profileImageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" />
                   ) : (
                     <span style={{ fontSize: '28px' }}>📷</span>
                   )}
                 </div>
+
+                {/* File Upload Button for Profile Picture */}
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', padding: '10px', background: '#1c1c1f', border: '1px solid #2d2d30', borderRadius: '6px', color: '#a1a1aa', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', marginBottom: '10px', boxSizing: 'border-box' }}>
+                  <Upload size={14} style={{ color: '#818cf8' }} />
+                  <span>Upload Profile Picture</span>
+                  <input type="file" accept="image/*" onChange={handleProfilePictureUpload} style={{ display: 'none' }} />
+                </label>
                 
+                <label style={{ display: 'block', fontSize: '10px', color: '#727278', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '4px', textAlign: 'left' }}>Or Image URL</label>
                 <input 
                   type="text" 
-                  placeholder="Image URL" 
+                  placeholder="https://example.com/avatar.jpg" 
                   value={profileImageUrl} 
                   onChange={(e) => setProfileImageUrl(e.target.value)} 
                   style={{ width: '100%', background: '#060607', border: '1px solid #1c1c1f', padding: '10px', borderRadius: '6px', color: '#fff', fontSize: '12px', boxSizing: 'border-box' }} 
                 />
+
+                {profileImageUrl && (
+                  <button 
+                    type="button" 
+                    onClick={() => setProfileImageUrl('')} 
+                    style={{ marginTop: '10px', background: 'transparent', border: 'none', color: '#ff4a4a', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                  >
+                    <Trash2 size={12} /> Clear Picture
+                  </button>
+                )}
               </div>
 
               {/* Submit Button */}

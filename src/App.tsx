@@ -93,7 +93,7 @@ export default function App() {
           // If there's already an active global audio instance playing another track
           if (currentAudio.current && currentAudio.current.src.includes(audioUrl)) {
             if (currentAudio.current.paused) {
-              currentAudio.current.play();
+              currentAudio.current.play().catch(err => console.warn('Audio play notice:', err));
               playBtn.classList.add('playing');
             } else {
               currentAudio.current.pause();
@@ -110,7 +110,7 @@ export default function App() {
             currentAudio.current = new Audio(audioUrl);
             currentPlayBtn.current = playBtn as HTMLElement;
             
-            currentAudio.current.play();
+            currentAudio.current.play().catch(err => console.warn('Audio play notice:', err));
             playBtn.classList.add('playing');
 
             currentAudio.current.onended = () => {

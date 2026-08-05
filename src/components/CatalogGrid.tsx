@@ -17,27 +17,32 @@ export default function CatalogGrid() {
         const fetchCatalog = async () => {
             try {
                 const response = await fetch('/api/beats');
-                console.log("Response status:", response.status);
                 const data = await response.json();
-                console.log("Fetched data:", data);
-                console.log("Type of data:", typeof data);
                 if (Array.isArray(data)) {
-                  setTracks(data);
+                    setTracks(data);
                 } else if (data && typeof data === 'object' && Array.isArray((data as any).beats)) {
-                  setTracks((data as any).beats);
+                    setTracks((data as any).beats);
                 } else {
-                  console.error("Data is not an array or does not contain 'beats':", data);
-                  setTracks([]);
+                    setTracks([]);
                 }
             } catch (error) {
                 console.error("Failed to load catalog:", error);
+                setTracks([]);
             }
         };
         fetchCatalog();
     }, []);
 
+    if (tracks.length === 0) {
+        return (
+            <div id="catalogGrid" className="catalog-grid text-center py-12 text-neutral-500">
+                <p>No tracks in catalog. Upload or publish beats to display them here.</p>
+            </div>
+        );
+    }
+
     return (
-        <div id="catalogGrid" className="catalog-grid">
+        <div id="catalogGrid" className="catalog-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.isArray(tracks) && tracks.map((track) => (
                 <div key={track.id} className="beat-card bg-[#0e0e10] border border-[#1c1c1f] rounded-lg p-4" data-audio-url={track.taggedMp3Url}>
                     <img 

@@ -42,6 +42,7 @@ export interface Profile {
   name: string;
   bio: string;
   avatarUrl: string;
+  bannerUrl?: string;
   voiceTagUrl?: string;
   paypalEmail?: string;
   socialLinks: SocialLink[];
