@@ -14,6 +14,7 @@ import {
   Disc
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import CatalogGrid from '../components/CatalogGrid';
 
 export default function Home() {
   const { incrementAnalytics } = useStore();
@@ -320,6 +321,15 @@ export default function Home() {
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* LIVE BEAT CATALOG */}
+              <div style={{ borderTop: '1px solid #1c1c1f', paddingTop: '30px', marginBottom: '40px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Disc size={18} style={{ color: '#6366f1' }} />
+                  Live Beat Catalog
+                </h3>
+                <CatalogGrid />
               </div>
 
               {/* PayPal Secure Booking Section */}

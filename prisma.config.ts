@@ -3,12 +3,16 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+const dbUrl = process.env.DATABASE_URL || (process.env.SQL_HOST 
+    ? `postgresql://${process.env.SQL_USER}:${process.env.SQL_PASSWORD}@localhost/${process.env.SQL_DB_NAME}?host=${process.env.SQL_HOST}` 
+    : 'postgresql://postgres:postgres@localhost:5432/krypside_db');
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: dbUrl,
   },
 });

@@ -25,6 +25,7 @@ export default defineConfig(() => {
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
     build: {
+      target: 'node20',
       chunkSizeWarningLimit: 3000,
       rollupOptions: {
         external: [

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "postinstall": "prisma generate",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --external:@prisma/client --external:.prisma/client --external:./src/generated/client/* --outdir=dist",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --external:@prisma/client --external:.prisma/client --outdir=dist",
     "start": "node dist/server.js",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",

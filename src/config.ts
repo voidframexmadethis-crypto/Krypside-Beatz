@@ -5,5 +5,7 @@ export const config = {
   STORAGE_MODE: 'LOCAL_VAULT',
   VAULT_PATH: './vault_storage',
   // Default fallback database connection string for local instance if env is blank
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/krypside_db'
+  DATABASE_URL: process.env.DATABASE_URL || (process.env.SQL_HOST 
+    ? `postgresql://${process.env.SQL_USER}:${process.env.SQL_PASSWORD}@localhost/${process.env.SQL_DB_NAME}?host=${process.env.SQL_HOST}` 
+    : 'postgresql://postgres:postgres@localhost:5432/krypside_db')
 };

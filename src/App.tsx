@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { StoreProvider } from './context/StoreContext';
 import { AuthProvider } from './context/AuthContext';
@@ -50,6 +50,9 @@ export const KRYPSIDE_STREAM_VARIABLES = {
 };
 
 export default function App() {
+  const currentAudio = useRef<HTMLAudioElement | null>(null);
+  const currentPlayBtn = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     let visitorId = localStorage.getItem('KRYPSIDE_VISITOR_ID');
     if (!visitorId) {
@@ -72,6 +75,51 @@ export default function App() {
   useEffect(() => {
     const handleGlobalClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      
+      // Handle checkout button delegation
+      if (target.matches('.checkout-btn')) {
+        const beatId = (target as any).dataset.beatId;
+        const price = (target as any).dataset.price;
+        console.log('Triggering checkout for beat:', beatId, 'price:', price);
+        window.dispatchEvent(new CustomEvent('trigger-checkout', { detail: { beatId, price } }));
+      }
+
+      // Handle play button delegation
+      const playBtn = target.closest('.play-pause-btn');
+      if (playBtn) {
+        const card = target.closest('.beat-card') as HTMLElement;
+        const audioUrl = card?.dataset.audioUrl;
+        if (audioUrl) {
+          // If there's already an active global audio instance playing another track
+          if (currentAudio.current && currentAudio.current.src.includes(audioUrl)) {
+            if (currentAudio.current.paused) {
+              currentAudio.current.play();
+              playBtn.classList.add('playing');
+            } else {
+              currentAudio.current.pause();
+              playBtn.classList.remove('playing');
+            }
+          } else {
+            // Stop previous audio if playing
+            if (currentAudio.current) {
+              currentAudio.current.pause();
+              if (currentPlayBtn.current) currentPlayBtn.current.classList.remove('playing');
+            }
+
+            // Play new track
+            currentAudio.current = new Audio(audioUrl);
+            currentPlayBtn.current = playBtn as HTMLElement;
+            
+            currentAudio.current.play();
+            playBtn.classList.add('playing');
+
+            currentAudio.current.onended = () => {
+              playBtn.classList.remove('playing');
+            };
+          }
+        }
+      }
+
       const link = target.closest('a');
       if (link) {
         if (link.hostname === window.location.hostname) {

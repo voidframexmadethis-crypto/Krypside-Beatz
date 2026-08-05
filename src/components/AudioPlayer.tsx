@@ -48,6 +48,19 @@ export default function AudioPlayer() {
   const [volume, setVolumeState] = useState(0.85);
   const [isMuted, setIsMuted] = useState(false);
 
+  // Listen for global checkout trigger
+  useEffect(() => {
+    const handleCheckoutTrigger = (e: any) => {
+      const { beatId } = e.detail;
+      const beat = state.beats.find(b => b.id === beatId);
+      if (beat) {
+        setCheckoutBeat(beat);
+      }
+    };
+    window.addEventListener('trigger-checkout', handleCheckoutTrigger);
+    return () => window.removeEventListener('trigger-checkout', handleCheckoutTrigger);
+  }, [state.beats]);
+
   // Load comments keyed by track ID
   useEffect(() => {
     if (currentTrack?.id) {

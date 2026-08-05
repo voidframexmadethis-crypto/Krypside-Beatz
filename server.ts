@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+import multer from 'multer';
 import { createServer as createViteServer } from 'vite';
 import { createPaypalRouter } from './src/api/paypal.js';
 import { initializeApp } from 'firebase/app';
@@ -23,11 +24,20 @@ async function startServer() {
   const app = express();
   const PORT = config.PORT;
 
+  const VAULT_DIR = path.join(__dirname, 'vault_storage');
+  if (!fs.existsSync(VAULT_DIR)) {
+    fs.mkdirSync(VAULT_DIR, { recursive: true });
+  }
+
   const firebaseApp = initializeApp(firebaseConfig);
   const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
 
   app.use(cors());
   app.use(express.json());
+  
+  // Serve uploaded files
+  app.use('/uploads', express.static(VAULT_DIR));
+
   app.use(createPaypalRouter(prisma));
 
   // Strict Admin Key Check (Ensures ONLY you can upload)
@@ -39,11 +49,19 @@ async function startServer() {
     next();
   };
 
-  // Vault Storage Directory Setup
-  const VAULT_DIR = path.join(__dirname, 'vault_storage');
-  if (!fs.existsSync(VAULT_DIR)) {
-    fs.mkdirSync(VAULT_DIR, { recursive: true });
-  }
+
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const subDir = file.fieldname === 'artwork' ? 'artwork' : 'audio';
+      const dir = path.join(VAULT_DIR, subDir);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '_' + file.originalname);
+    }
+  });
+  const upload = multer({ storage });
 
   // Master Upload Endpoint (Single-User Exclusive)
   app.post('/api/master/upload', verifyMasterAdmin, async (req, res) => {
@@ -63,20 +81,21 @@ async function startServer() {
       } = req.body;
 
       // Register track directly into your private database catalog
-      const newBeat = await prisma.beat.create({
+      const newBeat = await prisma.masterTrack.create({
         data: {
           title,
+          slug: title.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
           bpm: Number(bpm),
-          key,
+          musicalKey: key,
           genre: "Trap",
-          mp3Url,
-          wavUrl,
-          stemsUrl,
+          taggedMp3Url: mp3Url,
+          untaggedWavUrl: wavUrl,
+          stemsZipUrl: stemsUrl,
           coverArtUrl,
           priceMp3: Number(priceMp3),
           priceWav: Number(priceWav),
           priceStems: Number(priceStems),
-          priceExcl: Number(priceExcl)
+          priceExclusive: Number(priceExcl)
         }
       });
 
@@ -85,6 +104,39 @@ async function startServer() {
         message: 'Trap beat successfully indexed into Krypside Vault storage.',
         beat: newBeat
       });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // File Upload Endpoint
+  app.post('/api/master/upload-files', verifyMasterAdmin, upload.fields([{ name: 'artwork', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), async (req, res) => {
+    try {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      const { title, bpm, key, priceMp3, priceWav, priceStems, priceExcl } = req.body;
+      
+      const artworkPath = files.artwork[0].path;
+      const audioPath = files.audio[0].path;
+
+      const newBeat = await prisma.masterTrack.create({
+        data: {
+          title,
+          slug: title.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
+          bpm: Number(bpm),
+          musicalKey: key,
+          genre: "Trap",
+          taggedMp3Url: audioPath,
+          untaggedWavUrl: audioPath,
+          stemsZipUrl: audioPath,
+          coverArtUrl: artworkPath,
+          priceMp3: Number(priceMp3),
+          priceWav: Number(priceWav),
+          priceStems: Number(priceStems),
+          priceExclusive: Number(priceExcl)
+        }
+      });
+
+      res.status(201).json({ success: true, beat: newBeat });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
@@ -116,11 +168,20 @@ async function startServer() {
   // Public Catalog Stream Endpoint (For artists browsing your site)
   app.get('/api/beats', async (req, res) => {
     try {
-      const beats = await prisma.beat.findMany({
+      const beats = await prisma.masterTrack.findMany({
         orderBy: { createdAt: 'desc' }
       });
-      res.json(beats);
+      console.log("Beats found:", beats.length);
+      const formattedBeats = beats.map(beat => ({
+        ...beat,
+        coverArtUrl: beat.coverArtUrl ? '/uploads/' + path.basename(beat.coverArtUrl) : null,
+        taggedMp3Url: beat.taggedMp3Url ? '/uploads/' + path.basename(beat.taggedMp3Url) : null,
+        untaggedWavUrl: beat.untaggedWavUrl ? '/uploads/' + path.basename(beat.untaggedWavUrl) : null,
+        stemsZipUrl: beat.stemsZipUrl ? '/uploads/' + path.basename(beat.stemsZipUrl) : null,
+      }));
+      res.json({ beats: formattedBeats });
     } catch (error: any) {
+      console.error("Error in /api/beats:", error);
       res.status(500).json({ error: error.message });
     }
   });
