@@ -92,9 +92,9 @@ export default function PermanentPlayerCard({ beat }: PermanentPlayerCardProps) 
       {/* Artwork Container with Discount Badge */}
       <div className="art-container relative w-[90px] h-[90px] flex-shrink-0">
         <img 
-          src={beat.coverArtUrl || 'https://via.placeholder.com/400'} 
+          src={(beat as any).artwork || beat.coverArtUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60'} 
           alt="Krypside Beat Artwork" 
-          className="player-art w-full h-full object-cover rounded-[8px] border border-white/8"
+          className="player-art w-full h-full object-cover rounded-xl border border-white/8"
           onError={handleImageError}
         />
         {(beat.originalPrice && beat.originalPrice > beat.price) && (

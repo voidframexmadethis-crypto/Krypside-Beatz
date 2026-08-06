@@ -389,12 +389,15 @@ export default function Player() {
         {/* Top Section */}
         <div className="flex flex-col md:flex-row items-start gap-8">
           {/* Cover Art */}
-          <div className="w-48 h-48 md:w-[220px] md:h-[220px] shrink-0 bg-[#1a1a1a] overflow-hidden relative shadow-2xl rounded">
-            {displayCover ? (
-              <img src={displayCover} alt={displayTitle} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-neutral-500"><Music size={64} /></div>
-            )}
+          <div className="w-48 h-48 md:w-[220px] md:h-[220px] shrink-0 bg-[#1a1a1a] overflow-hidden relative shadow-2xl rounded-xl">
+            <img 
+              src={(currentBeat as any).artwork || currentBeat.coverArtUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60'} 
+              alt={displayTitle} 
+              className="w-full h-full object-cover" 
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60';
+              }}
+            />
           </div>
 
           {/* Info Section */}
@@ -541,7 +544,7 @@ export default function Player() {
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-4">
                           <div 
-                            className="relative w-10 h-10 bg-[#1a1a1a] overflow-hidden cursor-pointer group-hover:opacity-80 rounded" 
+                            className="relative w-10 h-10 bg-[#1a1a1a] overflow-hidden cursor-pointer group-hover:opacity-80 rounded-xl" 
                             onClick={() => {
                               setCurrentBeatIndex(idx);
                               if (currentTrack?.id === beat.id) {
@@ -551,7 +554,14 @@ export default function Player() {
                               }
                             }}
                           >
-                            {beat.coverArtUrl ? <img src={beat.coverArtUrl} alt={beat.title} className="w-full h-full object-cover" /> : <Music size={16} />}
+                            <img 
+                              src={(beat as any).artwork || beat.coverArtUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60'} 
+                              alt={beat.title} 
+                              className="w-full h-full object-cover" 
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60';
+                              }}
+                            />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                               {isPlaying && currentTrack?.id === beat.id ? (
                                 <Pause size={16} fill="white" className="text-white" />

@@ -19,14 +19,16 @@ export default function CatalogGrid() {
         <div id="catalogGrid" className="catalog-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.isArray(tracks) && tracks.map((track) => (
                 <div key={track.id} className="beat-card bg-[#0e0e10] border border-[#1c1c1f] rounded-lg p-4" data-audio-url={track.audioUrl}>
-                    <img 
-                      src={track.coverArtUrl || (track as any).artwork || (track as any).artworkUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60'} 
-                      alt={track.title} 
-                      className="beat-cover-art w-full h-40 object-cover rounded mb-4" 
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60';
-                      }}
-                    />
+                    <div className="w-full h-40 mb-4 overflow-hidden rounded-xl">
+                        <img 
+                          src={(track as any).artwork || track.coverArtUrl || (track as any).artworkUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60'} 
+                          alt={track.title} 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60';
+                          }}
+                        />
+                    </div>
                     <div className="beat-title text-lg font-bold mb-1 text-white">{track.title}</div>
                     <div className="beat-meta text-sm text-neutral-400 mb-4">
                         <span>{track.bpm || '140'} BPM</span> • <span>Key: {track.key || 'C Min'}</span>
