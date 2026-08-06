@@ -1,7 +1,4 @@
 import express from 'express';
-import './src/lib/safeguard.js';
-import { initializeApp as initializeAdminApp, getApps as getAdminApps } from 'firebase-admin/app';
-import { getFirestore as getAdminFirestore } from 'firebase-admin/firestore';
 import { PrismaClient } from './src/generated/client/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
@@ -12,6 +9,8 @@ import cors from 'cors';
 import multer from 'multer';
 import { createServer as createViteServer } from 'vite';
 import { createPaypalRouter } from './src/api/paypal.js';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import firebaseConfig from './firebase-applet-config.json';
 import { getSecureTrackDownloadUrl, uploadAudioToMassStorage } from './src/lib/cloudStorage.js';
 
@@ -23,22 +22,6 @@ async function startServer() {
   const pool = new Pool({ connectionString: config.DATABASE_URL });
   const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
-
-  // Initialize Firebase Admin for server-side stability
-  if (!getAdminApps().length) {
-    initializeAdminApp({
-      projectId: firebaseConfig.projectId,
-    });
-  }
-  const db = getAdminFirestore();
-  if (firebaseConfig.firestoreDatabaseId) {
-    // Note: Admin SDK handles databaseId automatically if it's the default,
-    // but for named databases we need to ensure the client is pointing to the right one.
-    // However, in admin.initializeApp, we usually only need projectId for ADC.
-    // If we need a specific database, we use it in the getFirestore call if supported,
-    // or set the FIRESTORE_DATABASE env var.
-  }
-
   const app = express();
   const PORT = config.PORT;
 
@@ -89,6 +72,9 @@ async function startServer() {
   } catch (err) {
     console.log("Database table auto-init notice:", err);
   }
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
 
   app.use(cors());
   app.use(express.json());
@@ -258,7 +244,7 @@ async function startServer() {
   // Subscribers Endpoint
   app.get('/api/subscribers', async (req, res) => {
     try {
-      const subSnapshot = await db.collection('subscribers').get();
+      const subSnapshot = await getDocs(collection(db, 'subscribers'));
       const subscribers = subSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       
       res.json({ success: true, subscribers, notifications: [], pushSubscriptionsCount: 0 });
@@ -270,7 +256,7 @@ async function startServer() {
   // Licenses Endpoint
   app.get('/api/admin/licenses', async (req, res) => {
     try {
-      const licenseSnapshot = await db.collection('licenses').get();
+      const licenseSnapshot = await getDocs(collection(db, 'licenses'));
       const licenses = licenseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       res.json({ success: true, licenses });
     } catch (error: any) {

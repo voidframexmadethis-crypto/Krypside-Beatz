@@ -30,7 +30,29 @@ interface StoreContextType {
   resetAnalytics: (metric: keyof Analytics) => void;
 }
 
-const STARTER_BEATS: Beat[] = [];
+const STARTER_BEATS: Beat[] = [
+  {
+    id: '1',
+    title: 'Keep on going',
+    producer: 'KRYPSIDE',
+    bpm: 118,
+    key: 'A flat minor',
+    price: 55.00,
+    audioUrl: '', 
+    coverArtUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+    visibility: 'Public',
+    trackType: 'Beat',
+    isHumanUploaded: true,
+    isLocal: true,
+    licenses: {
+      mp3Lease: { enabled: true, price: 55.00 },
+      wavLease: { enabled: false, price: 65.00 },
+      premiumLease: { enabled: false, price: 150.00 },
+      unlimitedLease: { enabled: false, price: 250.00 },
+      exclusive: { enabled: false, price: 500.00 },
+    }
+  }
+];
 
 const defaultState: StoreState = {
   profile: {
@@ -40,17 +62,16 @@ const defaultState: StoreState = {
     socialLinks: [],
   },
   videos: [],
-  beats: [],
+  beats: STARTER_BEATS,
   archivedBeats: [],
   analytics: {
-    siteVisits: 0,
-    uniqueVisitors: 0,
+    numVisits: 0,
     totalPlays: 0,
     totalShares: 0,
     downloads: 0,
     totalEarnings: 0,
     platformFees: 0,
-  },
+  } as any,
 };
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -59,7 +80,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [state, setState] = useState<StoreState>(() => {
     try {
-      const savedBeats = localStorage.getItem('krypside_beats_backup');
+      const savedBeats = localStorage.getItem('krypside_user_tracks');
       const savedArchived = localStorage.getItem('krypside_archived_backup');
       const savedProfile = localStorage.getItem('krypside_profile_backup');
       const parsedBeats = savedBeats ? JSON.parse(savedBeats) : [];
@@ -67,7 +88,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       return {
         profile: savedProfile ? JSON.parse(savedProfile) : defaultState.profile,
         videos: [],
-        beats: validBeats,
+        beats: validBeats.length > 0 ? validBeats : STARTER_BEATS,
         archivedBeats: savedArchived ? JSON.parse(savedArchived) : [],
         analytics: defaultState.analytics,
       };
@@ -100,7 +121,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const validBeats = filterHumanBeats(state.beats);
-      localStorage.setItem('krypside_beats_backup', JSON.stringify(validBeats));
+      localStorage.setItem('krypside_user_tracks', JSON.stringify(validBeats));
       localStorage.setItem('krypside_archived_backup', JSON.stringify(state.archivedBeats));
       localStorage.setItem('krypside_profile_backup', JSON.stringify(state.profile));
     } catch (e) {

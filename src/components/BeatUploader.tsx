@@ -282,36 +282,6 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
   const setFormData = (val: any) => 
     setUploaderState(p => ({ ...p, formData: typeof val === 'function' ? val(p.formData) : val }));
 
-  const removeFileFromQueue = (fileName: string) => {
-    setUploaderState(prev => {
-      const nextProgress = { ...prev.uploadProgress };
-      delete nextProgress[fileName];
-      return { ...prev, uploadProgress: nextProgress };
-    });
-  };
-
-  const handleMultipleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    
-    // Process audio files
-    const audioFiles = Array.from(files).filter(f => f.type.startsWith('audio/'));
-    if (audioFiles.length > 0) {
-      // Create a DataTransfer to simulate a FileList
-      const dt = new DataTransfer();
-      audioFiles.forEach(f => dt.items.add(f));
-      handleFileUpload(dt.files, 'audio', 'tagged');
-    }
-
-    // Process image files
-    const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-    if (imageFiles.length > 0) {
-      const dt = new DataTransfer();
-      imageFiles.forEach(f => dt.items.add(f));
-      handleFileUpload(dt.files, 'image');
-    }
-  };
-
   const [previewCommentText, setPreviewCommentText] = useState('');
   const [previewComments, setPreviewComments] = useState<{name: string, text: string, time: string}[]>([]);
 
@@ -404,12 +374,12 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent, type: 'audio' | 'image') => {
+  const handleDrop = (e: React.DragEvent, type: 'audio' | 'image', role: 'tagged' | 'untagged' | 'stems' | 'tag' = 'tagged') => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileUpload(e.dataTransfer.files, type);
+      handleFileUpload(e.dataTransfer.files, type, role);
     }
   };
 
@@ -493,7 +463,7 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
     }));
   };
 
-  const handleFileUpload = async (files: FileList | null, type: 'audio' | 'image', role: 'tagged' | 'untagged' | 'stems' | 'tag' = 'tagged') => {
+  const handleFileUpload = async (files: FileList | null, type: 'audio' | 'image', role: 'tagged' | 'untagged' | 'stems' | 'tag' = 'tagged', event?: React.ChangeEvent<HTMLInputElement>) => {
     if (!files || files.length === 0) return;
     
     setIsUploading(true);
@@ -509,9 +479,16 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
       } catch (e) {}
 
       if (type === 'image') {
-        setFormData(prev => ({ ...prev, coverArtUrl: prev.coverArtUrl || instantObjectUrl }));
-      } else if (type === 'audio' && role === 'tagged') {
-        setFormData(prev => ({ ...prev, audioUrl: prev.audioUrl || instantObjectUrl }));
+        setFormData(prev => ({ ...prev, coverArtUrl: instantObjectUrl }));
+      } else if (type === 'audio') {
+        setFormData(prev => {
+          const updated = { ...prev };
+          if (role === 'tagged') updated.audioUrl = instantObjectUrl;
+          else if (role === 'untagged') updated.untaggedM4aUrl = instantObjectUrl;
+          else if (role === 'stems') updated.stemsZipUrl = instantObjectUrl;
+          else if (role === 'tag') updated.voiceTagUrl = instantObjectUrl;
+          return updated;
+        });
         setUploadedFiles(prev => [...prev, file]);
       }
 
@@ -562,13 +539,12 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
           if (result.success) {
             setFormData((prev: any) => {
               if (type === 'image') return { ...prev, coverArtUrl: result.url };
-              return {
-                ...prev,
-                audioUrl: role === 'tagged' ? result.url : prev.audioUrl,
-                untaggedM4aUrl: role === 'untagged' ? result.url : prev.untaggedM4aUrl,
-                stemsZipUrl: role === 'stems' ? result.url : prev.stemsZipUrl,
-                voiceTagUrl: role === 'tag' ? result.url : prev.voiceTagUrl,
-              };
+              const updated = { ...prev };
+              if (role === 'tagged') updated.audioUrl = result.url;
+              else if (role === 'untagged') updated.untaggedM4aUrl = result.url;
+              else if (role === 'stems') updated.stemsZipUrl = result.url;
+              else if (role === 'tag') updated.voiceTagUrl = result.url;
+              return updated;
             });
           }
         } catch (err) {
@@ -577,6 +553,11 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
           setIsUploading(false);
         }
       }
+    }
+
+    // Reset input value to allow selecting the same file again
+    if (event) {
+      event.target.value = '';
     }
   };
 
@@ -787,77 +768,265 @@ const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) =>
                 </div>
               </div>
             )}
-            <div className="uploader-container">
-              <label htmlFor="beatUploader" className="uploader-dropzone">
-                <Upload className="w-8 h-8 mb-3 text-indigo-400" />
-                <span className="font-medium text-neutral-200">Drop your beats & artwork here or click to browse</span>
-                <p className="text-xs text-neutral-500 mt-2">Supports MP3, WAV, M4A, JPG, PNG</p>
-                <input 
-                  type="file" 
-                  id="beatUploader" 
-                  multiple 
-                  accept="audio/*,image/*" 
-                  style={{ display: 'none' }} 
-                  onChange={handleMultipleUpload}
-                />
-              </label>
-              
-              <div id="uploadQueue" className="upload-queue-grid">
-                {Object.entries(uploadProgress).map(([fileName, progress]) => (
-                  <div key={fileName} className="queue-item-card animate-in fade-in zoom-in-95">
-                    <div className="queue-info">
-                      <span className="file-name">{fileName}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 h-1 bg-neutral-800 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-indigo-500 transition-all duration-300" 
-                            style={{ width: `${progress}%` }} 
-                          />
-                        </div>
-                        <span className="file-size">{Math.round(progress)}%</span>
-                      </div>
-                    </div>
-                    <button 
-                      type="button" 
-                      onClick={() => removeFileFromQueue(fileName)}
-                      className="remove-queue-btn"
-                    >
-                      Remove
-                    </button>
+            <div>
+              <h2 className="text-xl font-semibold mb-4 border-b border-neutral-800 pb-2">Audio Files</h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* TAGGED MP3 */}
+                <div 
+                  className={`bg-neutral-950 border border-neutral-800 rounded-xl p-4 flex flex-col relative group transition-colors ${
+                    isDragging ? 'border-indigo-500 bg-indigo-500/10' : ''
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, 'audio', 'tagged')}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Tagged MP3</label>
+                    <span className="text-[10px] text-indigo-400 font-medium">Public Stream</span>
                   </div>
-                ))}
-                
-                <div className="col-span-full mt-4 pt-4 border-t border-neutral-800">
-                  <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-4">Refine File Roles</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="bg-neutral-950/50 border border-neutral-800 rounded-lg p-3">
-                      <p className="text-[10px] font-bold text-neutral-500 uppercase mb-2">Tagged MP3</p>
-                      <button onClick={() => document.getElementById('mp3-upload')?.click()} className="text-[10px] text-indigo-400 hover:underline">
-                        {formData.audioUrl ? 'Change File' : 'Select File'}
-                      </button>
-                      <input id="mp3-upload" type="file" accept="audio/*" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'tagged')} />
+                  <div 
+                    className="flex-1 border border-dashed border-neutral-700 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-900/50 transition-colors"
+                    onClick={() => document.getElementById('mp3-upload')?.click()}
+                  >
+                    {formData.audioUrl ? (
+                      <div className="text-center w-full">
+                        <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
+                        <p className="text-[10px] text-neutral-300 truncate w-full px-2">{formData.audioUrl.split('/').pop()}</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Music className="w-5 h-5 text-neutral-500 mb-1" />
+                        <p className="text-[10px] text-neutral-500">Upload Tagged MP3</p>
+                      </>
+                    )}
+                    <input id="mp3-upload" type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'tagged', e)} />
+                  </div>
+                  {formData.untaggedM4aUrl && formData.voiceTagUrl && (
+                    <button 
+                      onClick={async () => {
+                        setIsUploading(true);
+                        try {
+                          const res = await fetch('/api/audio/watermark', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              rawBeatUrl: formData.untaggedM4aUrl,
+                              voiceTagUrl: formData.voiceTagUrl,
+                              outputFileName: `tagged_${formData.title.replace(/\s+/g, '_')}_${Date.now()}.mp3`
+                            })
+                          });
+                          const data = await res.json();
+                          if (data.success) {
+                            setFormData(prev => ({ ...prev, audioUrl: data.url }));
+                          }
+                        } catch (err) {
+                          console.error("Watermarking failed:", err);
+                        } finally {
+                          setIsUploading(false);
+                        }
+                      }}
+                      className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-indigo-600 hover:bg-indigo-500 text-white text-[9px] font-bold py-1 px-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                    >
+                      AI GENERATE TAGGED
+                    </button>
+                  )}
+                  <input
+                    type="url"
+                    name="audioUrl"
+                    value={formData.audioUrl}
+                    onChange={handleChange}
+                    placeholder="Direct MP3 Link"
+                    className="mt-2 w-full bg-neutral-900 border border-neutral-800 rounded px-2 py-1.5 text-[10px] text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+
+                {/* UNTAGGED M4A */}
+                <div 
+                  className={`bg-neutral-950 border border-neutral-800 rounded-xl p-4 flex flex-col transition-colors ${
+                    isDragging ? 'border-indigo-500 bg-indigo-500/10' : ''
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, 'audio', 'untagged')}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Untagged M4A</label>
+                    <span className="text-[10px] text-emerald-400 font-medium">For Buyers</span>
+                  </div>
+                  <div 
+                    className="flex-1 border border-dashed border-neutral-700 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-900/50 transition-colors"
+                    onClick={() => document.getElementById('m4a-upload')?.click()}
+                  >
+                    {formData.untaggedM4aUrl ? (
+                      <div className="text-center w-full">
+                        <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
+                        <p className="text-[10px] text-neutral-300 truncate w-full px-2">{formData.untaggedM4aUrl.split('/').pop()}</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Music className="w-5 h-5 text-neutral-500 mb-1" />
+                        <p className="text-[10px] text-neutral-500">Upload Untagged M4A</p>
+                      </>
+                    )}
+                    <input id="m4a-upload" type="file" accept="audio/mp4,audio/x-m4a" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'untagged', e)} />
+                  </div>
+                  <input
+                    type="url"
+                    name="untaggedM4aUrl"
+                    value={formData.untaggedM4aUrl}
+                    onChange={handleChange}
+                    placeholder="Direct M4A Link"
+                    className="mt-2 w-full bg-neutral-900 border border-neutral-800 rounded px-2 py-1.5 text-[10px] text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+
+                {/* STEMS ZIP */}
+                <div 
+                  className={`bg-neutral-950 border border-neutral-800 rounded-xl p-4 flex flex-col transition-colors ${
+                    isDragging ? 'border-indigo-500 bg-indigo-500/10' : ''
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, 'audio', 'stems')}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Stems ZIP</label>
+                    <span className="text-[10px] text-amber-400 font-medium">Trackouts</span>
+                  </div>
+                  <div 
+                    className="flex-1 border border-dashed border-neutral-700 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-900/50 transition-colors"
+                    onClick={() => document.getElementById('stems-upload')?.click()}
+                  >
+                    {formData.stemsZipUrl ? (
+                      <div className="text-center w-full">
+                        <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
+                        <p className="text-[10px] text-neutral-300 truncate w-full px-2">{formData.stemsZipUrl.split('/').pop()}</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-5 h-5 text-neutral-500 mb-1" />
+                        <p className="text-[10px] text-neutral-500">Upload Stems ZIP</p>
+                      </>
+                    )}
+                    <input id="stems-upload" type="file" accept=".zip,.rar,.7z" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'stems', e)} />
+                  </div>
+                  <input
+                    type="url"
+                    name="stemsZipUrl"
+                    value={formData.stemsZipUrl}
+                    onChange={handleChange}
+                    placeholder="Direct ZIP Link"
+                    className="mt-2 w-full bg-neutral-900 border border-neutral-800 rounded px-2 py-1.5 text-[10px] text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+
+                {/* PRODUCER VOICE TAG */}
+                <div 
+                  className={`bg-neutral-950 border border-neutral-800 rounded-xl p-4 flex flex-col transition-colors ${
+                    isDragging ? 'border-indigo-500 bg-indigo-500/10' : ''
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, 'audio', 'tag')}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Voice Tag</label>
+                    <span className="text-[10px] text-indigo-400 font-medium">Protection</span>
+                  </div>
+                  <div 
+                    className="flex-1 border border-dashed border-neutral-700 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-900/50 transition-colors"
+                    onClick={() => document.getElementById('tag-upload')?.click()}
+                  >
+                    {formData.voiceTagUrl ? (
+                      <div className="text-center w-full">
+                        <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
+                        <p className="text-[10px] text-neutral-300 truncate w-full px-2">{formData.voiceTagUrl.split('/').pop()}</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Music className="w-5 h-5 text-neutral-500 mb-1" />
+                        <p className="text-[10px] text-neutral-500">Upload Tag</p>
+                      </>
+                    )}
+                    <input id="tag-upload" type="file" accept="audio/*" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'tag', e)} />
+                  </div>
+                  <input
+                    type="url"
+                    name="voiceTagUrl"
+                    value={formData.voiceTagUrl}
+                    onChange={handleChange}
+                    placeholder="Direct Tag Link"
+                    className="mt-2 w-full bg-neutral-900 border border-neutral-800 rounded px-2 py-1.5 text-[10px] text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
+
+              {isUploading && (
+                <div className="mt-4 bg-indigo-500/10 border border-indigo-500/20 rounded-lg p-3 flex items-center gap-3">
+                  <Loader2 className="w-4 h-4 text-indigo-400 animate-spin" />
+                  <div className="flex-1">
+                    <div className="flex justify-between text-[10px] text-indigo-300 mb-1">
+                      <span>Syncing files to {isDevMode ? 'local registry' : 'cloud storage'}...</span>
+                      <span>{Math.round((Object.values(uploadProgress) as number[]).reduce((a: number, b: number) => a + b, 0) / (Object.keys(uploadProgress).length || 1))}%</span>
                     </div>
-                    <div className="bg-neutral-950/50 border border-neutral-800 rounded-lg p-3">
-                      <p className="text-[10px] font-bold text-neutral-500 uppercase mb-2">Untagged M4A</p>
-                      <button onClick={() => document.getElementById('m4a-upload')?.click()} className="text-[10px] text-indigo-400 hover:underline">
-                        {formData.untaggedM4aUrl ? 'Change File' : 'Select File'}
-                      </button>
-                      <input id="m4a-upload" type="file" accept="audio/*" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'untagged')} />
+                    <div className="w-full h-1 bg-neutral-800 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-indigo-500 transition-all duration-300" 
+                        style={{ width: `${(Object.values(uploadProgress) as number[]).reduce((a: number, b: number) => a + b, 0) / (Object.keys(uploadProgress).length || 1)}%` }} 
+                      />
                     </div>
-                    <div className="bg-neutral-950/50 border border-neutral-800 rounded-lg p-3">
-                      <p className="text-[10px] font-bold text-neutral-500 uppercase mb-2">Stems ZIP</p>
-                      <button onClick={() => document.getElementById('stems-upload')?.click()} className="text-[10px] text-indigo-400 hover:underline">
-                        {formData.stemsZipUrl ? 'Change File' : 'Select File'}
-                      </button>
-                      <input id="stems-upload" type="file" accept=".zip,.rar,.7z" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'audio', 'stems')} />
-                    </div>
-                    <div className="bg-neutral-950/50 border border-neutral-800 rounded-lg p-3">
-                      <p className="text-[10px] font-bold text-neutral-500 uppercase mb-2">Artwork</p>
-                      <button onClick={() => document.getElementById('image-upload-input')?.click()} className="text-[10px] text-indigo-400 hover:underline">
-                        {formData.coverArtUrl ? 'Change Image' : 'Select Image'}
-                      </button>
-                      <input id="image-upload-input" type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e.target.files, 'image')} />
-                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h2 className="text-xl font-semibold mb-4 border-b border-neutral-800 pb-2">Artwork</h2>
+              <div className="flex items-center space-x-6">
+                <div 
+                  className={`w-32 h-32 bg-neutral-950 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-neutral-500 flex-shrink-0 overflow-hidden cursor-pointer transition-colors ${
+                    isDragging ? 'border-indigo-500 bg-indigo-500/10' : 'border-neutral-700 hover:border-neutral-500'
+                  }`}
+                  onClick={() => document.getElementById('image-upload-input')?.click()}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, 'image')}
+                >
+                  {formData.coverArtUrl ? (
+                    <img src={formData.coverArtUrl} alt="Cover Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <>
+                      <ImageIcon className="w-8 h-8 mb-2 text-neutral-400" />
+                      <span className="text-[10px] text-neutral-400">Click or Drop Image</span>
+                    </>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">Cover Art URL</label>
+                  <input
+                    type="url"
+                    name="coverArtUrl"
+                    value={formData.coverArtUrl}
+                    onChange={handleChange}
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <div className="mt-4 flex gap-2">
+                     <button type="button"
+                       className="px-3 py-1.5 bg-neutral-800 text-xs font-medium rounded-md hover:bg-neutral-700 flex items-center"
+                       onClick={() => document.getElementById('image-upload-input')?.click()}
+                     >
+                       <Upload className="w-3 h-3 mr-1" /> Upload Image
+                     </button>
+                     <input
+                       id="image-upload-input"
+                       type="file"
+                       accept="image/*,*"
+                       className="hidden"
+                       onChange={(e) => handleFileUpload(e.target.files, 'image', 'tagged', e)}
+                     />
+                     <button type="button" className="px-3 py-1.5 bg-indigo-500/10 text-indigo-400 text-xs font-medium rounded-md border border-indigo-500/20 flex items-center">
+                       <Sparkles className="w-3 h-3 mr-1" /> AI Generate Cover
+                     </button>
                   </div>
                 </div>
               </div>

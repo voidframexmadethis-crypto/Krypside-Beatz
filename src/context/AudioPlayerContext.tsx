@@ -24,7 +24,31 @@ interface AudioPlayerContextType {
 export const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
 
 export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
-  const [currentTrack, setCurrentTrack] = useState<Beat | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<Beat | null>(() => {
+    try {
+      const saved = localStorage.getItem('krypside_current_track');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Don't restore blob URLs as they are invalid after reload
+        if (parsed.audioUrl && parsed.audioUrl.startsWith('blob:')) {
+          parsed.audioUrl = '';
+        }
+        if (parsed.coverArtUrl && parsed.coverArtUrl.startsWith('blob:')) {
+          parsed.coverArtUrl = '';
+        }
+        return parsed;
+      }
+    } catch (e) {
+      console.warn("Failed to load saved track from localStorage:", e);
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (currentTrack) {
+      localStorage.setItem('krypside_current_track', JSON.stringify(currentTrack));
+    }
+  }, [currentTrack]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -51,7 +75,7 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
         setIsPlaying(true);
         setError(null);
 
-        // Sync external track if needed
+        // Sync external track if needed (e.g. if played from outside this context)
         const currentSrc = audio.src;
         if (currentSrc && (!currentTrack || (currentTrack.watermarkedAudioUrl !== currentSrc && currentTrack.audioUrl !== currentSrc))) {
           const beatIdMatch = currentSrc.match(/\/stream\/(.+)\.mp3/);
@@ -95,6 +119,15 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
         }
       }
     });
+
+    // Load initial track into audio engine if it exists and has a valid URL
+    if (currentTrack && audio && (!audio.src || audio.src === window.location.href || audio.src === window.location.origin + '/')) {
+      const url = currentTrack.watermarkedAudioUrl || currentTrack.audioUrl;
+      if (url && !url.startsWith('blob:')) {
+        audio.src = url;
+        audio.load();
+      }
+    }
 
     return () => {
       unsubscribe();
