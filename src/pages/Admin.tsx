@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { useAuth } from '../context/AuthContext';
-import { Lock, BarChart3, DollarSign, TrendingUp, PlayCircle, Share2, ThumbsUp, ThumbsDown, Music, UploadCloud, Download, Eye, Users, Mail, Bell, RefreshCw, Send, CheckCircle2, Volume2, Upload, LogOut, Disc } from 'lucide-react';
+import { Lock, BarChart3, DollarSign, TrendingUp, PlayCircle, Share2, ThumbsUp, ThumbsDown, Music, UploadCloud, Download, Eye, Users, Mail, Bell, RefreshCw, Send, CheckCircle2, Volume2, Upload, LogOut, Disc, Edit } from 'lucide-react';
 import Uploader from './Uploader';
+import { Beat } from '../types';
 
 export default function Admin() {
   const { state, updateProfile, resetAnalytics } = useStore();
@@ -31,6 +32,7 @@ export default function Admin() {
   }
 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'subscribers' | 'voicetag' | 'uploader' | 'plaque' | 'push' | 'isrc' | 'killswitch'>('dashboard');
+  const [trackToEdit, setTrackToEdit] = useState<Beat | null>(null);
   const [subscribers, setSubscribers] = useState<{ email: string; name: string; subscribedAt: string; notifyOnBeatDrop: boolean }[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [notifications, setNotifications] = useState<{ id: string; title: string; body: string; sentAt: string; beatTitle?: string }[]>([]);
@@ -991,6 +993,7 @@ export default function Admin() {
                       <th className="px-6 py-4 font-medium text-neutral-400 text-sm text-center">Shares</th>
                       <th className="px-6 py-4 font-medium text-neutral-400 text-sm text-center">Downloads</th>
                       <th className="px-6 py-4 font-medium text-neutral-400 text-sm text-center">Earnings</th>
+                      <th className="px-6 py-4 font-medium text-neutral-400 text-sm text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-800">
@@ -1017,6 +1020,18 @@ export default function Admin() {
                         <td className="px-6 py-4 text-center font-mono text-blue-400">{beat.shares || 0}</td>
                         <td className="px-6 py-4 text-center font-mono text-purple-400">{beat.downloads || 0}</td>
                         <td className="px-6 py-4 text-center font-mono text-green-400">${(beat.earnings || 0).toFixed(2)}</td>
+                        <td className="px-6 py-4 text-right">
+                          <button 
+                            onClick={() => {
+                              setTrackToEdit(beat);
+                              setActiveTab('uploader');
+                            }}
+                            className="p-2 text-neutral-400 hover:text-indigo-400 transition-colors"
+                            title="Edit Beat"
+                          >
+                            <Edit size={18} />
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -1362,7 +1377,26 @@ export default function Admin() {
         </div>
       ) : (
         <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-6">
-          <Uploader />
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-white">
+              {trackToEdit ? `Editing: ${trackToEdit.title}` : 'Upload New Beat'}
+            </h2>
+            {trackToEdit && (
+              <button 
+                onClick={() => {
+                  setTrackToEdit(null);
+                  setActiveTab('dashboard');
+                }}
+                className="text-neutral-400 hover:text-white flex items-center gap-2 text-sm"
+              >
+                Cancel Edit
+              </button>
+            )}
+          </div>
+          <Uploader trackToEdit={trackToEdit || undefined} onClose={() => {
+            setTrackToEdit(null);
+            setActiveTab('dashboard');
+          }} />
         </div>
       )}
     </div>

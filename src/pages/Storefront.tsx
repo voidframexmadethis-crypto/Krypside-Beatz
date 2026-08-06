@@ -259,8 +259,11 @@ export default function Storefront() {
                     </button>
 
                     {/* Name of the beat in the middle */}
-                    <h3 className="font-extrabold text-white text-sm sm:text-base leading-snug truncate max-w-[85%] drop-shadow">
+                    <h3 className="font-extrabold text-white text-sm sm:text-base leading-snug truncate max-w-[85%] drop-shadow flex items-center justify-center gap-1.5">
                       {beat.title}
+                      {beat.isPermanent && (
+                        <span className="bg-indigo-500/30 text-indigo-300 text-[8px] px-1.5 py-0.5 rounded border border-indigo-500/40 font-black tracking-tighter">PERMANENT</span>
+                      )}
                     </h3>
 
                     {/* BPM in the middle */}
@@ -336,7 +339,12 @@ export default function Storefront() {
                 </div>
                 <div className="p-4">
                   <div className="flex justify-between items-start mb-1">
-                    <h3 className="font-bold truncate flex-1">{beat.title}</h3>
+                    <h3 className="font-bold truncate flex-1 flex items-center gap-2">
+                      {beat.title}
+                      {beat.isPermanent && (
+                        <span className="bg-indigo-500/20 text-indigo-400 text-[9px] px-1.5 py-0.5 rounded border border-indigo-500/30 font-bold tracking-tighter">PERMANENT</span>
+                      )}
+                    </h3>
                     <button 
                       onClick={() => handleLike(beat)}
                       className="text-neutral-500 hover:text-indigo-400 transition-colors ml-2"

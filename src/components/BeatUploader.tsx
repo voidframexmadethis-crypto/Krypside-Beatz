@@ -50,8 +50,13 @@ const isMarketingSetting = (key: string) => {
   return marketingKeys.includes(key);
 };
 
-const BeatUploader = React.memo(() => {
-  const { state, addBeat } = useStore();
+interface BeatUploaderProps {
+  trackToEdit?: Beat;
+  onClose?: () => void;
+}
+
+const BeatUploader = React.memo(({ trackToEdit, onClose }: BeatUploaderProps) => {
+  const { state, addBeat, updateBeat } = useStore();
   const { playTrack, togglePlay: toggleGlobalPlay, currentTrack, isPlaying: isGlobalPlaying } = useAudioPlayer();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -220,8 +225,32 @@ const BeatUploader = React.memo(() => {
       airbitFeaturedBid: '',
       localStorageBackupRegistry: true,
       tosComplianceMatrix: false,
+      isPermanent: true,
     }
   });
+
+  useEffect(() => {
+    if (trackToEdit) {
+      setUploaderState((prev: any) => ({
+        ...prev,
+        formData: {
+          ...prev.formData,
+          ...trackToEdit,
+          isPermanent: trackToEdit.isPermanent ?? true,
+          basicMp3LeasePrice: trackToEdit.licenses?.mp3Lease?.price || '',
+          basicMp3LeaseEnabled: trackToEdit.licenses?.mp3Lease?.enabled || false,
+          premiumWavLeasePrice: trackToEdit.licenses?.wavLease?.price || '',
+          premiumWavLeaseEnabled: trackToEdit.licenses?.wavLease?.enabled || false,
+          trackoutsLeasePrice: trackToEdit.licenses?.premiumLease?.price || '',
+          trackoutsLeaseEnabled: trackToEdit.licenses?.premiumLease?.enabled || false,
+          unlimitedLeasePrice: trackToEdit.licenses?.unlimitedLease?.price || '',
+          unlimitedLeaseEnabled: trackToEdit.licenses?.unlimitedLease?.enabled || false,
+          exclusiveRightsPrice: trackToEdit.licenses?.exclusive?.price || '',
+          exclusiveRightsEnabled: trackToEdit.licenses?.exclusive?.enabled || false,
+        }
+      }));
+    }
+  }, [trackToEdit]);
 
   const { currentStep, tagInput, uploadProgress, isUploading, isAnalyzing, analysisNotice, isDragging, uploadedFiles, formData } = uploaderState;
 
@@ -439,59 +468,28 @@ const BeatUploader = React.memo(() => {
     
     setIsUploading(true);
     const fileArray = Array.from(files);
-
-    if (type === 'audio') {
-      const uploader = new LightningUploader((beatPayload) => {
-        console.log("Ready for Render deployment:", beatPayload);
-        setFormData((prev: any) => ({
-          ...prev, 
-          audioUrl: (role === 'tagged' && !prev.audioUrl) ? beatPayload.url : prev.audioUrl,
-          untaggedM4aUrl: (role === 'untagged' && !prev.untaggedM4aUrl) ? beatPayload.url : prev.untaggedM4aUrl,
-          stemsZipUrl: (role === 'stems' && !prev.stemsZipUrl) ? beatPayload.url : prev.stemsZipUrl,
-          voiceTagUrl: (role === 'tag' && !prev.voiceTagUrl) ? beatPayload.url : prev.voiceTagUrl,
-          title: prev.title || beatPayload.title,
-        }));
-        if (beatPayload.file) {
-          setUploadedFiles((prev: File[]) => [...prev, beatPayload.file]);
-          setUploadProgress((prev: any) => ({ ...prev, [beatPayload.file.name]: 100 }));
-        }
-        setIsUploading(false);
-      });
-      uploader.processInstantUpload({ target: { files: fileArray } });
-      return;
-    }
     
     for (const file of fileArray) {
       const fileId = Math.random().toString(36).substring(7);
 
-      // 1. Instant processing for preview
+      // 1. Instant processing for preview (Object URL)
       let instantObjectUrl = '';
       try {
         instantObjectUrl = URL.createObjectURL(file);
       } catch (e) {}
 
-      setFormData(prev => ({ ...prev, coverArtUrl: prev.coverArtUrl || instantObjectUrl }));
+      if (type === 'image') {
+        setFormData(prev => ({ ...prev, coverArtUrl: prev.coverArtUrl || instantObjectUrl }));
+      } else if (type === 'audio' && role === 'tagged') {
+        setFormData(prev => ({ ...prev, audioUrl: prev.audioUrl || instantObjectUrl }));
+        setUploadedFiles(prev => [...prev, file]);
+      }
 
       // 2. Upload Logic
-      if (isDevMode) {
-        // Standard upload for images
-        const formDataPayload = new FormData();
-        formDataPayload.append('file', file);
-        fetch(`/api/upload-local?type=${type}`, {
-          method: 'POST',
-          body: formDataPayload,
-        })
-          .then(res => res.json())
-          .then(result => {
-            if (result.success) {
-              setFormData(prev => ({ ...prev, coverArtUrl: result.url }));
-            }
-          })
-          .catch(err => console.error("Local upload error:", err))
-          .finally(() => setIsUploading(false));
-      } else if (user) {
-        // Firebase Logic (existing)
-        const storagePath = `artworks/${user.uid}/${fileId}_${file.name}`;
+      if (user) {
+        // 🛡️ PERMANENT FIREBASE STORAGE
+        const folder = type === 'image' ? 'artworks' : 'beats';
+        const storagePath = `${folder}/${user.uid}/${fileId}_${file.name}`;
         const storageRef = ref(storage, storagePath);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -500,15 +498,54 @@ const BeatUploader = React.memo(() => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setUploadProgress(prev => ({ ...prev, [file.name]: progress }));
           }, 
-          (error) => { console.error('Upload failed:', error); setIsUploading(false); }, 
+          (error) => { 
+            console.error('Upload failed:', error); 
+            setIsUploading(false); 
+          }, 
           async () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            setFormData(prev => ({ ...prev, coverArtUrl: downloadURL }));
+            setFormData((prev: any) => {
+              if (type === 'image') return { ...prev, coverArtUrl: downloadURL };
+              return {
+                ...prev,
+                audioUrl: role === 'tagged' ? downloadURL : prev.audioUrl,
+                untaggedM4aUrl: role === 'untagged' ? downloadURL : prev.untaggedM4aUrl,
+                stemsZipUrl: role === 'stems' ? downloadURL : prev.stemsZipUrl,
+                voiceTagUrl: role === 'tag' ? downloadURL : prev.voiceTagUrl,
+              };
+            });
             setIsUploading(false);
           }
         );
       } else {
-        setIsUploading(false);
+        // ☁️ FALLBACK: LOCAL UPLOAD WITH ABSOLUTE URL
+        const formDataPayload = new FormData();
+        formDataPayload.append('file', file);
+        
+        try {
+          const res = await fetch(`/api/upload-local?type=${type}`, {
+            method: 'POST',
+            body: formDataPayload,
+          });
+          const result = await res.json();
+          
+          if (result.success) {
+            setFormData((prev: any) => {
+              if (type === 'image') return { ...prev, coverArtUrl: result.url };
+              return {
+                ...prev,
+                audioUrl: role === 'tagged' ? result.url : prev.audioUrl,
+                untaggedM4aUrl: role === 'untagged' ? result.url : prev.untaggedM4aUrl,
+                stemsZipUrl: role === 'stems' ? result.url : prev.stemsZipUrl,
+                voiceTagUrl: role === 'tag' ? result.url : prev.voiceTagUrl,
+              };
+            });
+          }
+        } catch (err) {
+          console.error("Local upload error:", err);
+        } finally {
+          setIsUploading(false);
+        }
       }
     }
   };
@@ -559,7 +596,7 @@ const BeatUploader = React.memo(() => {
     const finalRedirectUrl = formData.redirectUrl || `/audio-player?track=${encodeURIComponent(finalTitle)}`;
 
     const newBeat: Beat = {
-      id: 'human_beat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      id: trackToEdit?.id || ('human_beat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)),
       title: finalTitle,
       producer: formData.producer || 'Krypside',
       bpm: Number(formData.bpm) || 130,
@@ -575,6 +612,7 @@ const BeatUploader = React.memo(() => {
       trackType: formData.trackType || 'Beat',
       isHumanUploaded: true,
       isLocal: true,
+      isPermanent: formData.isPermanent,
       licenses: {
         mp3Lease: { enabled: formData.basicMp3LeaseEnabled, price: Number(formData.basicMp3LeasePrice) || 35.00 },
         wavLease: { enabled: formData.premiumWavLeaseEnabled, price: Number(formData.premiumWavLeasePrice) || 65.00 },
@@ -623,9 +661,13 @@ const BeatUploader = React.memo(() => {
     };
 
     try {
-      await addBeat(newBeat);
+      if (trackToEdit) {
+        await updateBeat(trackToEdit.id, newBeat);
+      } else {
+        await addBeat(newBeat);
+      }
     } catch (err) {
-      console.warn("addBeat notice:", err);
+      console.warn("Save beat notice:", err);
     }
 
     // 🎵 Stream immediately on Audio Player when beat is uploaded/published!
@@ -652,7 +694,11 @@ const BeatUploader = React.memo(() => {
     handlePostPublishAutomation(newBeat, formData);
 
     // Navigate straight to the beat on the audio player page!
-    navigate(`/audio-player?track=${encodeURIComponent(newBeat.title)}`);
+    if (onClose) {
+      onClose();
+    } else {
+      navigate(`/audio-player?track=${encodeURIComponent(newBeat.title)}`);
+    }
   };
 
   return (
@@ -1925,8 +1971,28 @@ const BeatUploader = React.memo(() => {
                 </span>
               </div>
               
-              <div className="bg-neutral-950 p-4 rounded-lg border border-neutral-800 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-neutral-950 p-4 rounded-lg border border-neutral-800 space-y-6">
+                  <div className="flex items-center justify-between pb-4 border-b border-neutral-800">
+                    <div>
+                      <h3 className="font-bold text-indigo-400 flex items-center gap-2">
+                        <Sparkles size={16} /> Make Permanent on Audio Player
+                      </h3>
+                      <p className="text-xs text-neutral-400 mt-1">
+                        Ensures absolute URLs are locked in and assets remain persistent across redeployments.
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        className="sr-only peer" 
+                        checked={formData.isPermanent} 
+                        onChange={(e) => setFormData(prev => ({ ...prev, isPermanent: e.target.checked }))} 
+                      />
+                      <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.3)]"></div>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-400 mb-1">Visibility Placement</label>
                     <select name="visibilityPlacement" value={formData.visibilityPlacement} onChange={handleChange} className="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">

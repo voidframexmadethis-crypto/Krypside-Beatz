@@ -152,6 +152,7 @@ export interface Beat {
   copyrightLine?: string;
   licenseStatus?: 'active' | 'revoked' | 'flagged';
   streamingToken?: string;
+  isPermanent?: boolean;
 }
 
 export type MarketingErrorCode = 

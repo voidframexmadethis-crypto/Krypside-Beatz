@@ -240,6 +240,9 @@ export default function AudioPlayer() {
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
                     {currentTrack.title}
+                    {currentTrack.isPermanent && (
+                      <span className="bg-indigo-500/20 text-indigo-400 text-[9px] px-1.5 py-0.5 rounded border border-indigo-500/30 font-bold tracking-tighter">PERMANENT</span>
+                    )}
                     {currentTrack.bpm > 0 && <span className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full font-mono">🎹 {currentTrack.bpm} BPM</span>}
                     {currentTrack.key && currentTrack.key !== 'N/A' && <span className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full font-mono">🎵 {currentTrack.key}</span>}
                   </h3>
@@ -371,8 +374,11 @@ export default function AudioPlayer() {
             </div>
 
             <div className="flex flex-col min-w-0">
-              <h4 className="text-xs md:text-sm font-bold text-white truncate hover:text-purple-400 transition-colors">
+              <h4 className="text-xs md:text-sm font-bold text-white truncate hover:text-purple-400 transition-colors flex items-center gap-2">
                 {currentTrack.title}
+                {currentTrack.isPermanent && (
+                  <span className="bg-indigo-500/20 text-indigo-400 text-[8px] px-1.5 py-0.5 rounded border border-indigo-500/30 font-bold tracking-tighter">PERMANENT</span>
+                )}
               </h4>
               <div className="flex items-center gap-2 text-[11px] text-neutral-400 truncate mt-0.5">
                 <span className="font-semibold text-neutral-300 truncate">{currentTrack.producer || 'KRYPSIDE'}</span>
