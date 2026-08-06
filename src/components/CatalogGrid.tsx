@@ -60,6 +60,18 @@ export default function CatalogGrid() {
                     <div className="card-actions flex gap-2">
                         <button className="play-pause-btn flex-1 bg-indigo-600 text-white py-2 rounded font-bold hover:bg-indigo-500 transition-all cursor-pointer">Stream</button>
                         <button className="checkout-btn flex-1 border border-indigo-600 text-indigo-400 py-2 rounded font-bold hover:bg-indigo-600 hover:text-white transition-all cursor-pointer" data-beat-id={track.id} data-price={track.priceMp3}>License</button>
+                        {localStorage.getItem('KRYPSIDE_ADMIN_AUTH') === 'true' && (
+                            <button 
+                                onClick={() => {
+                                    // Navigate to admin portal to edit or just show alert
+                                    window.location.href = `/admin-portal?edit=${track.id}`;
+                                }}
+                                className="p-2 border border-neutral-800 rounded text-neutral-400 hover:text-indigo-400"
+                                title="Edit in Admin Portal"
+                            >
+                                ⚙️
+                            </button>
+                        )}
                     </div>
                 </div>
             ))}

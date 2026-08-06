@@ -14,13 +14,15 @@ import {
   ShoppingCart,
   Clock,
   Send,
-  X
+  X,
+  Edit
 } from 'lucide-react';
 import { useAudioPlayer } from '../context/AudioPlayerContext';
 import { useStore } from '../context/StoreContext';
 import ShareModal from './ShareModal';
 import CheckoutModal from './CheckoutModal';
 import CheckoutErrorBoundary from './CheckoutErrorBoundary';
+import BeatEditModal from './BeatEditModal';
 import { downloadAudioFile } from '../lib/beatUtils';
 import { krypsideMasterAudio } from '../lib/krypsideMasterAudio';
 import { Beat } from '../types';
@@ -40,6 +42,7 @@ export default function AudioPlayer() {
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [checkoutBeat, setCheckoutBeat] = useState<Beat | null>(null);
+  const [trackToEdit, setTrackToEdit] = useState<Beat | null>(null);
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState<{ name: string; text: string; time: string }[]>([]);
   const [countdownTime, setCountdownTime] = useState('00h : 00m : 00s');
@@ -47,6 +50,8 @@ export default function AudioPlayer() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [volume, setVolumeState] = useState(0.85);
   const [isMuted, setIsMuted] = useState(false);
+
+  const isAdmin = localStorage.getItem('KRYPSIDE_ADMIN_AUTH') === 'true';
 
   // Listen for global checkout trigger
   useEffect(() => {
@@ -245,6 +250,15 @@ export default function AudioPlayer() {
                     )}
                     {currentTrack.bpm > 0 && <span className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full font-mono">🎹 {currentTrack.bpm} BPM</span>}
                     {currentTrack.key && currentTrack.key !== 'N/A' && <span className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full font-mono">🎵 {currentTrack.key}</span>}
+                    {isAdmin && (
+                      <button 
+                        onClick={() => setTrackToEdit(currentTrack)}
+                        className="p-1.5 bg-neutral-800 hover:bg-indigo-600 text-neutral-400 hover:text-white rounded transition-all"
+                        title="Edit Track Details"
+                      >
+                        <Edit size={14} />
+                      </button>
+                    )}
                   </h3>
                   <p className="text-xs text-neutral-400 mt-0.5">
                     Produced by <span className="text-purple-400 font-semibold">{currentTrack.producer || 'KRYPSIDE'}</span> • Released {formattedDate}
@@ -474,6 +488,18 @@ export default function AudioPlayer() {
               <span className="hidden lg:inline">Share</span>
             </button>
 
+            {/* Edit Button for Admin */}
+            {isAdmin && (
+              <button 
+                onClick={() => setTrackToEdit(currentTrack)}
+                className="p-2 text-indigo-400 hover:text-white bg-neutral-900 hover:bg-indigo-600/30 border border-neutral-800 hover:border-indigo-500/50 rounded-lg transition-colors hidden xl:flex items-center gap-1.5 text-xs font-semibold"
+                title="Quick Edit"
+              >
+                <Edit size={14} />
+                <span>Edit</span>
+              </button>
+            )}
+
             {/* Details & Comments Drawer Toggle */}
             <button 
               onClick={() => setIsExpanded(!isExpanded)}
@@ -532,6 +558,17 @@ export default function AudioPlayer() {
           onSuccess={handlePurchaseSuccess} 
         />
       </CheckoutErrorBoundary>
+
+      {/* Quick Edit Modal */}
+      {trackToEdit && (
+        <BeatEditModal 
+          beat={trackToEdit}
+          onClose={() => setTrackToEdit(null)}
+          onSave={async (id, updates) => {
+            await updateBeat(id, updates);
+          }}
+        />
+      )}
 
     </div>
   );

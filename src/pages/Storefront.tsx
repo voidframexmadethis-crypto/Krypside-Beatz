@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { useAudioPlayer } from '../context/AudioPlayerContext';
-import { ShoppingCart, Download, ThumbsUp, Share2, Music, ChevronLeft, ChevronRight, Disc, Sparkles, Play, Pause } from 'lucide-react';
+import { ShoppingCart, Download, ThumbsUp, Share2, Music, ChevronLeft, ChevronRight, Disc, Sparkles, Play, Pause, Edit } from 'lucide-react';
 import { Beat } from '../types';
 import CheckoutModal from '../components/CheckoutModal';
 import CheckoutErrorBoundary from '../components/CheckoutErrorBoundary';
 import SubscribeDownloadModal from '../components/SubscribeDownloadModal';
+import BeatEditModal from '../components/BeatEditModal';
+import PermanentPlayerCard from '../components/PermanentPlayerCard';
 import { filterHumanBeats, isAIPlaceholderBeat, downloadAudioFile } from '../lib/beatUtils';
 
 export default function Storefront() {
@@ -17,6 +19,18 @@ export default function Storefront() {
   const { currentTrack, isPlaying: isGlobalPlaying, playTrack, togglePlay: toggleGlobalPlay } = useAudioPlayer();
   const [checkoutBeat, setCheckoutBeat] = useState<Beat | null>(null);
   const [downloadUnlockBeat, setDownloadUnlockBeat] = useState<Beat | null>(null);
+  const [trackToEdit, setTrackToEdit] = useState<Beat | null>(null);
+
+  const isAdmin = localStorage.getItem('KRYPSIDE_ADMIN_AUTH') === 'true';
+
+  const allBeats = filterHumanBeats([...state.beats]).sort((a, b) => {
+    const scoreA = (a.likes || 0) + (a.plays || 0);
+    const scoreB = (b.likes || 0) + (b.plays || 0);
+    return scoreB - scoreA;
+  });
+
+  const permanentBeats = allBeats.filter(b => b.isPermanent);
+  const regularBeats = allBeats.filter(b => !b.isPermanent);
 
   // 🔗 DEEP LINKING & PLAYER SYNC HANDLER
   useEffect(() => {
@@ -131,12 +145,6 @@ export default function Storefront() {
     });
   };
 
-  const displayBeats = filterHumanBeats([...state.beats]).sort((a, b) => {
-    const scoreA = (a.likes || 0) + (a.plays || 0);
-    const scoreB = (b.likes || 0) + (b.plays || 0);
-    return scoreB - scoreA;
-  });
-
   const isPlaying = (beatId: string) => isGlobalPlaying && currentTrack?.id === beatId;
 
   // 🏆 MILESTONES CELEBRATION LOGIC
@@ -186,8 +194,29 @@ export default function Storefront() {
           </div>
         </div>
       )}
+
+      {/* 🛡️ PERMANENT VAULT: FEATURED SECTION */}
+      {permanentBeats.length > 0 && (
+        <section className="animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <div className="flex items-center gap-3 mb-8 border-b border-neutral-800 pb-4">
+             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+               <Sparkles size={20} />
+             </div>
+             <div>
+               <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">Permanent Vault</h2>
+               <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest mt-1">Locked Assets • Guaranteed Persistence</p>
+             </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {permanentBeats.map(beat => (
+              <PermanentPlayerCard key={beat.id} beat={beat} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* 🟢 CIRCULAR COLLECTION SHOWCASE SECTION */}
-      {displayBeats.length > 0 && (
+      {regularBeats.length > 0 && (
         <section className="bg-neutral-950/80 rounded-2xl p-6 border border-neutral-800/80 shadow-2xl relative">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -224,7 +253,7 @@ export default function Storefront() {
             ref={collectionScrollRef}
             className="flex overflow-x-auto gap-6 pb-4 pt-2 scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-transparent scroll-smooth snap-x"
           >
-            {displayBeats.map((beat, idx) => (
+            {regularBeats.map((beat, idx) => (
               <div 
                 key={`circ-${beat.id || idx}`}
                 className="flex-shrink-0 snap-start flex flex-col items-center group relative"
@@ -291,6 +320,15 @@ export default function Storefront() {
                     >
                       <Share2 size={12} />
                     </button>
+                    {isAdmin && (
+                      <button 
+                        onClick={() => setTrackToEdit(beat)}
+                        className="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-indigo-400 hover:border-indigo-500 flex items-center justify-center transition-all active:scale-90"
+                        title="Edit Beat"
+                      >
+                        <Edit size={12} />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -302,7 +340,7 @@ export default function Storefront() {
       {/* TRENDING TRACKS GRID SECTION */}
       <div>
         <h1 className="text-3xl font-bold mb-8">Trending tracks</h1>
-        {displayBeats.length === 0 ? (
+        {regularBeats.length === 0 ? (
           <div className="bg-neutral-950/80 border border-neutral-800 rounded-2xl p-12 text-center my-4 shadow-xl">
             <div className="w-16 h-16 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
               <Music className="w-8 h-8 text-indigo-400" />
@@ -314,7 +352,7 @@ export default function Storefront() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {displayBeats.map((beat, idx) => (
+            {regularBeats.map((beat, idx) => (
               <div key={beat.id ? `${beat.id}-${idx}` : idx} className="bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800 group">
                 <div className="relative aspect-square">
                   {beat.coverArtUrl ? (
@@ -379,6 +417,15 @@ export default function Storefront() {
                       >
                         <Share2 size={16} />
                       </button>
+                      {isAdmin && (
+                        <button 
+                          onClick={() => setTrackToEdit(beat)}
+                          className="text-neutral-400 hover:text-indigo-400 transition-colors"
+                          title="Edit Beat"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -408,6 +455,17 @@ export default function Storefront() {
         beat={downloadUnlockBeat}
         onSuccess={triggerDownload}
       />
+
+      {trackToEdit && (
+        <BeatEditModal 
+          beat={trackToEdit}
+          onClose={() => setTrackToEdit(null)}
+          onSave={async (id, updates) => {
+            await updateBeat(id, updates);
+            // Optionally update state if updateBeat doesn't do it instantly or if we need a refresh signal
+          }}
+        />
+      )}
     </div>
   );
 }

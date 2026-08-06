@@ -12,6 +12,7 @@ import { createPaypalRouter } from './src/api/paypal.js';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import firebaseConfig from './firebase-applet-config.json';
+import { getSecureTrackDownloadUrl, uploadAudioToMassStorage } from './src/lib/cloudStorage.js';
 
 import { config } from './src/config.js';
 const __filename = fileURLToPath(import.meta.url);
@@ -161,6 +162,45 @@ async function startServer() {
         success: true,
         message: 'Trap beat successfully indexed into Krypside Vault storage.',
         beat: newBeat
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // 🛡️ SECURE S3 STORAGE ACCESS
+  // Generates a temporary link for purchased items (e.g., zip stems)
+  app.get('/api/secure/download', async (req, res) => {
+    try {
+      const { key } = req.query;
+      if (!key || typeof key !== 'string') {
+        return res.status(400).json({ error: 'Missing track key' });
+      }
+
+      // TODO: Validate user purchase/license here before generating URL
+      
+      const url = await getSecureTrackDownloadUrl(key);
+      res.json({ success: true, url });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Master S3 Cloud Upload (Bypasses local disk storage)
+  app.post('/api/master/upload-s3', verifyMasterAdmin, upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No file provided' });
+      
+      const fileBuffer = fs.readFileSync(req.file.path);
+      const response = await uploadAudioToMassStorage(fileBuffer, req.file.originalname, req.file.mimetype);
+      
+      // Cleanup local temp file
+      fs.unlinkSync(req.file.path);
+
+      res.json({ 
+        success: true, 
+        message: 'Asset uploaded to Krypside Mass Cloud Storage',
+        s3Response: response 
       });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
