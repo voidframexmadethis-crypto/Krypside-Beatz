@@ -7,7 +7,7 @@ import firebaseConfig from '../../firebase-applet-config.json';
 const app = initializeApp(firebaseConfig);
 
 // Silence internal gRPC stream lifecycle notices (e.g. idle stream disconnects)
-setLogLevel('error');
+setLogLevel('silent');
 
 export const db = initializeFirestore(app, {
   experimentalAutoDetectLongPolling: true,

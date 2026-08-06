@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "tsx server.ts",
     "postinstall": "prisma generate",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --external:@prisma/client --external:.prisma/client --outdir=dist",
-    "start": "node dist/server.js",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --external:./src/generated/client/* --sourcemap --outfile=dist/server.cjs",
+    "start": "node dist/server.cjs",
     "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
+    "clean": "rm -rf dist server.cjs server.js",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

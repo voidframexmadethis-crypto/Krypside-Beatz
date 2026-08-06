@@ -106,6 +106,21 @@ async function startServer() {
   });
   const upload = multer({ storage });
 
+  // Local file upload endpoint with permanent absolute public URLs
+  app.post('/api/upload-local', upload.single('file'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+      const subDir = req.query.type === 'image' ? 'artwork' : 'audio';
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const fileUrl = `${baseUrl}/uploads/${subDir}/${req.file.filename}`;
+      res.json({ success: true, url: fileUrl });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Master Upload Endpoint (Single-User Exclusive)
   app.post('/api/master/upload', verifyMasterAdmin, async (req, res) => {
     try {
@@ -152,14 +167,15 @@ async function startServer() {
     }
   });
 
-  // File Upload Endpoint
+  // File Upload Endpoint with permanent absolute public URLs
   app.post('/api/master/upload-files', verifyMasterAdmin, upload.fields([{ name: 'artwork', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), async (req, res) => {
     try {
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
       const { title, bpm, key, priceMp3, priceWav, priceStems, priceExcl } = req.body;
       
-      const artworkPath = files.artwork[0].path;
-      const audioPath = files.audio[0].path;
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const artworkUrl = files.artwork && files.artwork[0] ? `${baseUrl}/uploads/artwork/${files.artwork[0].filename}` : '';
+      const audioUrl = files.audio && files.audio[0] ? `${baseUrl}/uploads/audio/${files.audio[0].filename}` : '';
 
       const newBeat = await prisma.masterTrack.create({
         data: {
@@ -168,10 +184,10 @@ async function startServer() {
           bpm: Number(bpm),
           musicalKey: key,
           genre: "Trap",
-          taggedMp3Url: audioPath,
-          untaggedWavUrl: audioPath,
-          stemsZipUrl: audioPath,
-          coverArtUrl: artworkPath,
+          taggedMp3Url: audioUrl,
+          untaggedWavUrl: audioUrl,
+          stemsZipUrl: audioUrl,
+          coverArtUrl: artworkUrl,
           priceMp3: Number(priceMp3),
           priceWav: Number(priceWav),
           priceStems: Number(priceStems),
@@ -218,13 +234,21 @@ async function startServer() {
         orderBy: { createdAt: 'desc' }
       });
       console.log("Beats found:", beats.length);
-      const formattedBeats = beats.map(beat => ({
-        ...beat,
-        coverArtUrl: beat.coverArtUrl ? '/uploads/' + path.basename(beat.coverArtUrl) : null,
-        taggedMp3Url: beat.taggedMp3Url ? '/uploads/' + path.basename(beat.taggedMp3Url) : null,
-        untaggedWavUrl: beat.untaggedWavUrl ? '/uploads/' + path.basename(beat.untaggedWavUrl) : null,
-        stemsZipUrl: beat.stemsZipUrl ? '/uploads/' + path.basename(beat.stemsZipUrl) : null,
-      }));
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const formattedBeats = beats.map(beat => {
+        const fixUrl = (url: string | null) => {
+          if (!url) return null;
+          if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:')) return url;
+          return `${baseUrl}/uploads/${path.basename(url)}`;
+        };
+        return {
+          ...beat,
+          coverArtUrl: fixUrl(beat.coverArtUrl),
+          taggedMp3Url: fixUrl(beat.taggedMp3Url),
+          untaggedWavUrl: fixUrl(beat.untaggedWavUrl),
+          stemsZipUrl: fixUrl(beat.stemsZipUrl),
+        };
+      });
       res.json({ beats: formattedBeats });
     } catch (error: any) {
       res.json({ beats: [] });
@@ -246,8 +270,9 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Krypside Master Node running on port ${PORT}`);
+  const port = Number(process.env.PORT) || 3000;
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port}`);
   });
 }
 
