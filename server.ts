@@ -1,4 +1,5 @@
 import express from 'express';
+import './src/lib/safeguard.js';
 import { PrismaClient } from './src/generated/client/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
