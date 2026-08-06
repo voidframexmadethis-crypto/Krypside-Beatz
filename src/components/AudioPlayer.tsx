@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Play, 
   Pause, 
@@ -551,13 +552,17 @@ export default function AudioPlayer() {
       />
 
       {/* Checkout Modal */}
-      <CheckoutErrorBoundary>
-        <CheckoutModal 
-          beat={checkoutBeat} 
-          onClose={() => setCheckoutBeat(null)} 
-          onSuccess={handlePurchaseSuccess} 
-        />
-      </CheckoutErrorBoundary>
+      <AnimatePresence>
+        {checkoutBeat && (
+          <CheckoutErrorBoundary>
+            <CheckoutModal 
+              beat={checkoutBeat} 
+              onClose={() => setCheckoutBeat(null)} 
+              onSuccess={handlePurchaseSuccess} 
+            />
+          </CheckoutErrorBoundary>
+        )}
+      </AnimatePresence>
 
       {/* Quick Edit Modal */}
       {trackToEdit && (

@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { motion } from 'motion/react';
 import { Beat } from '../types';
+import { Sparkles } from 'lucide-react';
 
 interface CheckoutModalProps {
   beat: Beat | null;
@@ -121,87 +123,95 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ beat, onClose, onS
   if (!beat) return null;
 
   return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      display: 'flex', justifyContent: 'center', alignItems: 'center',
-      zIndex: 9999, padding: '20px'
-    }}>
-      <div style={{
-        backgroundColor: '#121212', border: '2px solid #ffcc00', borderRadius: '12px',
-        padding: '24px', maxWidth: '440px', width: '100%', color: '#ffffff',
-        fontFamily: 'sans-serif', boxShadow: '0 10px 30px rgba(0,0,0,0.8)'
-      }}>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-5 transition-all duration-300 ease-out"
+    >
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl max-w-md w-full overflow-hidden"
+      >
         
         {/* Header Layout */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#ffcc00', margin: 0, letterSpacing: '0.5px' }}>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-bold text-indigo-400 uppercase tracking-wider m-0">
             SECURE CHECKOUT TERMINAL
           </h2>
-          <button type="button" onClick={onClose} style={{ background: 'none', border: 'none', color: '#888888', fontSize: '24px', cursor: 'pointer' }}>✕</button>
+          <button 
+            type="button" 
+            onClick={onClose} 
+            className="bg-none border-none text-neutral-500 hover:text-white text-2xl cursor-pointer p-1"
+          >
+            ✕
+          </button>
         </div>
 
         {/* Item Summary Card */}
-        <div style={{ backgroundColor: '#1a1a1a', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ color: '#aaaaaa', fontSize: '14px' }}>Instrumental Lease: "{trackTitle}"</span>
-          <span style={{ color: '#00ffcc', fontWeight: 'bold', fontSize: '16px' }}>${finalPrice} USD</span>
+        <div className="bg-slate-950 p-3 px-4 rounded-xl mb-5 flex justify-between items-center border border-slate-800/50">
+          <span className="text-neutral-400 text-sm">Instrumental Lease: "{trackTitle}"</span>
+          <span className="text-emerald-400 font-bold text-lg">${finalPrice} USD</span>
         </div>
 
         {/* NAVIGATION TABS */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', borderBottom: '1px solid #222', paddingBottom: '10px' }}>
+        <div className="flex gap-2 mb-5 border-b border-slate-800 pb-3">
           <button 
             type="button"
             onClick={() => { setActiveTab('paypal'); setIsCryptoSuccess(false); setIsCryptoProcessing(false); }}
-            style={{ flex: 1, padding: '12px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', backgroundColor: activeTab === 'paypal' ? '#ffcc00' : '#222', color: activeTab === 'paypal' ? '#111' : '#aaa' }}
+            className={`flex-1 p-3 rounded-lg border-none cursor-pointer font-bold text-xs transition-all ${
+              activeTab === 'paypal' ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-neutral-400 hover:bg-slate-700'
+            }`}
           >
             💳 Card / PayPal
           </button>
           <button 
             type="button"
             onClick={() => setActiveTab('crypto')}
-            style={{ flex: 1, padding: '12px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', backgroundColor: activeTab === 'crypto' ? '#00ffcc' : '#222', color: activeTab === 'crypto' ? '#111' : '#aaa' }}
+            className={`flex-1 p-3 rounded-lg border-none cursor-pointer font-bold text-xs transition-all ${
+              activeTab === 'crypto' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-neutral-400 hover:bg-slate-700'
+            }`}
           >
             🪙 Crypto Ledger
           </button>
         </div>
 
         {errorMessage && (
-          <div style={{ backgroundColor: '#2a1414', border: '1px solid #ff4444', color: '#ff4444', padding: '12px', borderRadius: '6px', marginBottom: '16px', fontSize: '13px', textAlign: 'center' }}>
+          <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-4 text-xs text-center">
             {errorMessage}
           </div>
         )}
 
         {/* TAB 1: LIVE PAYPAL / DEBIT CARD TERMINAL */}
         {activeTab === 'paypal' && (
-          <div style={{ minHeight: '150px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div className="min-h-[150px] flex flex-col justify-center">
             {!isSdkLoaded && !errorMessage && (
-              <div style={{ textAlign: 'center', color: '#ffcc00', fontWeight: 'bold', fontSize: '14px' }}>
+              <div className="text-center text-indigo-400 font-bold text-sm animate-pulse">
                 🔒 ESTABLISHING SECURE BANKING ENCRYPTION LINK...
               </div>
             )}
-            <div ref={paypalContainerRef} style={{ width: '100%' }}></div>
+            <div ref={paypalContainerRef} className="w-full"></div>
           </div>
         )}
 
         {/* TAB 2: LIVE UPGRADED CRYPTO ROUTING PANEL */}
         {activeTab === 'crypto' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'center' }}>
+          <div className="flex flex-col gap-3 text-center">
             {!isCryptoProcessing && !isCryptoSuccess && (
               <>
-                <p style={{ color: '#aaa', fontSize: '14px', margin: 0, lineHeight: '1.4' }}>
-                  Authorize your purchase securely on the blockchain. Funds will route directly to your verified Krypside address:
+                <p className="text-neutral-400 text-sm m-0 leading-relaxed">
+                  Authorize your purchase securely on the blockchain. Funds will route directly to your verified address:
                 </p>
-                <div style={{ 
-                  backgroundColor: '#1a1a1a', padding: '14px', borderRadius: '6px', 
-                  fontFamily: 'monospace', fontSize: '11px', color: '#00ffcc', 
-                  wordBreak: 'break-all', border: '1px dashed #333'
-                }}>
+                <div className="bg-slate-950 p-4 rounded-xl font-mono text-[10px] text-emerald-400 break-all border border-slate-800 border-dashed">
                   0x71C7656EC7ab88b098defB751B7401B5f6d1476B
                 </div>
                 <button 
                   type="button" 
                   onClick={handleLiveCryptoConnect}
-                  style={{ width: '100%', backgroundColor: '#00ffcc', color: '#111111', border: 'none', borderRadius: '30px', padding: '16px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer' }}
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 border-none rounded-full p-4 font-bold text-base cursor-pointer transition-colors"
                 >
                   Connect Wallet & Pay
                 </button>
@@ -209,30 +219,26 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ beat, onClose, onS
             )}
 
             {isCryptoProcessing && !isCryptoSuccess && (
-              <div style={{ padding: '20px 0' }}>
-                <p style={{ color: '#00ffcc', fontWeight: 'bold', fontSize: '16px', margin: 0 }}>
+              <div className="py-5">
+                <p className="text-emerald-400 font-bold text-base m-0 animate-pulse">
                   ⏳ BROADCASTING TO BLOCKCHAIN NODE...
                 </p>
-                <p style={{ color: '#555', fontSize: '12px', marginTop: '4px' }}>Awaiting mempool ledger confirmation token</p>
-                <style>{`
-                  @keyframes pulse {
-                    0% { opacity: 1; }
-                    50% { opacity: 0.5; }
-                    100% { opacity: 1; }
-                  }
-                `}</style>
-                <div style={{ animation: 'pulse 1.5s infinite' }}></div>
+                <p className="text-neutral-500 text-[11px] mt-1">Awaiting mempool ledger confirmation token</p>
               </div>
             )}
 
             {isCryptoSuccess && (
-              <div style={{ padding: '10px 0' }}>
-                <div style={{ color: '#00ffcc', fontSize: '48px', marginBottom: '10px' }}>✓</div>
-                <h3 style={{ color: '#00ffcc', margin: '0 0 6px 0', fontSize: '18px', fontWeight: 'bold' }}>TRANSACTION VERIFIED</h3>
-                <p style={{ color: '#aaaaaa', fontSize: '14px', margin: '0 0 20px 0', lineHeight: '1.4' }}>
+              <div className="py-2">
+                <div className="text-emerald-400 text-5xl mb-2">✓</div>
+                <h3 className="text-emerald-400 m-0 mb-1.5 text-lg font-bold uppercase tracking-tight">TRANSACTION VERIFIED</h3>
+                <p className="text-neutral-400 text-sm m-0 mb-5 leading-relaxed">
                   The ledger entry cleared perfectly. Your license lease files have been released for immediate download.
                 </p>
-                <button type="button" onClick={onClose} style={{ backgroundColor: '#333333', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '10px 20px', cursor: 'pointer', fontWeight: 'bold' }}>
+                <button 
+                  type="button" 
+                  onClick={onClose} 
+                  className="bg-slate-800 hover:bg-slate-700 text-white border-none rounded-lg p-2.5 px-5 cursor-pointer font-bold text-sm transition-colors"
+                >
                   Return to Storefront
                 </button>
               </div>
@@ -240,11 +246,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ beat, onClose, onS
           </div>
         )}
 
-        <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '11px', color: '#555555' }}>
+        <div className="mt-6 text-center text-[10px] text-neutral-600 uppercase tracking-widest font-medium">
           Encrypted SSL Secure Framework • Independent Krypside Enterprise Pipeline
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

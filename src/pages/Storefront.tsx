@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { useAudioPlayer } from '../context/AudioPlayerContext';
@@ -435,19 +436,23 @@ export default function Storefront() {
         )}
       </div>
 
-      <CheckoutErrorBoundary>
-        <CheckoutModal 
-          onClose={() => {
-            setCheckoutBeat(null);
-            // Revert URL when closing
-            if (new URLSearchParams(window.location.search).has('beat')) {
-              window.history.pushState({}, '', window.location.pathname);
-            }
-          }} 
-          beat={checkoutBeat} 
-          onSuccess={handlePurchaseSuccess} 
-        />
-      </CheckoutErrorBoundary>
+      <AnimatePresence>
+        {checkoutBeat && (
+          <CheckoutErrorBoundary>
+            <CheckoutModal 
+              onClose={() => {
+                setCheckoutBeat(null);
+                // Revert URL when closing
+                if (new URLSearchParams(window.location.search).has('beat')) {
+                  window.history.pushState({}, '', window.location.pathname);
+                }
+              }} 
+              beat={checkoutBeat} 
+              onSuccess={handlePurchaseSuccess} 
+            />
+          </CheckoutErrorBoundary>
+        )}
+      </AnimatePresence>
 
       <SubscribeDownloadModal 
         isOpen={!!downloadUnlockBeat}

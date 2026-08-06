@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
@@ -607,15 +608,17 @@ export default function Player() {
       />
 
       {/* Checkout Modal */}
-      <CheckoutErrorBoundary>
+      <AnimatePresence>
         {checkoutBeat && (
-          <CheckoutModal 
-            onClose={() => setCheckoutBeat(null)} 
-            beat={checkoutBeat} 
-            onSuccess={handlePurchaseSuccess} 
-          />
+          <CheckoutErrorBoundary>
+            <CheckoutModal 
+              onClose={() => setCheckoutBeat(null)} 
+              beat={checkoutBeat} 
+              onSuccess={handlePurchaseSuccess} 
+            />
+          </CheckoutErrorBoundary>
         )}
-      </CheckoutErrorBoundary>
+      </AnimatePresence>
 
       <SubscribeDownloadModal 
         isOpen={!!downloadUnlockBeat}
