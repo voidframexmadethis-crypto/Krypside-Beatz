@@ -145,7 +145,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           beats: filtered.length > 0 ? filtered : filterHumanBeats(prev.beats)
         };
       });
-    }, (error) => {
+    }, (error: any) => {
+      // Ignore standard gRPC idle disconnects as the SDK handles reconnection automatically
+      if (error?.code === 'cancelled' || (error?.message && error.message.includes('CANCELLED'))) {
+        return;
+      }
       console.warn("Firestore public beats listener notice:", error);
     });
 
@@ -168,7 +172,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           ...prev,
           archivedBeats: privateBeats
         }));
-      }, (error) => {
+      }, (error: any) => {
+        // Ignore standard gRPC idle disconnects as the SDK handles reconnection automatically
+        if (error?.code === 'cancelled' || (error?.message && error.message.includes('CANCELLED'))) {
+          return;
+        }
         console.warn("Firestore private beats listener notice:", error);
       });
     }
@@ -191,7 +199,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           profile: { ...prev.profile, ...docSnap.data() } as Profile
         }));
       }
-    }, (error) => {
+    }, (error: any) => {
+      // Ignore standard gRPC idle disconnects as the SDK handles reconnection automatically
+      if (error?.code === 'cancelled' || (error?.message && error.message.includes('CANCELLED'))) {
+        return;
+      }
       console.warn("Firestore profile listener notice:", error);
     });
 

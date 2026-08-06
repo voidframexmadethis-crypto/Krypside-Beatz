@@ -1,6 +1,6 @@
 {
-  "name": "krypside-beatz",
-  "description": "Krypside Beat Store",
+  "name": "Krypside Beatz",
+  "description": "Premium Trap Beat Store & Artist Platform by Krypside",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

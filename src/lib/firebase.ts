@@ -11,6 +11,8 @@ setLogLevel('silent');
 
 export const db = initializeFirestore(app, {
   experimentalAutoDetectLongPolling: true,
+  // Force long polling if we're in an environment that kills idle gRPC streams
+  forceLongPolling: true,
 } as any, firebaseConfig.firestoreDatabaseId);
 
 export const auth = getAuth(app);
